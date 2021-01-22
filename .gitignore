@@ -1,0 +1,9 @@
+.idea/
+target/classes/
+target/generated-sources
+target/generated-sources/annotations
+target/maven-archiver
+target/maven-status
+target/GDS-Analytics-1.0-SNAPSHOT.jar.original
+
+GDS-Analytics.iml
