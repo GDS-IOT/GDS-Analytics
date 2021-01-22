@@ -70,6 +70,7 @@ public class GDSAnalyticsProcessor {
             }catch(Exception e){
                 LOGGER.error("Error occured while processing events. ",e);
                 consumer.close();
+                flag=false;
                 LOGGER.error("Shutting down kafka processor");
             }
         }
