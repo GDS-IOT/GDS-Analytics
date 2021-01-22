@@ -14,7 +14,7 @@ public class GDSConverter {
     @Value("${"+ Constants.SYSTEM_ID_END +"}")
     private int systemIdEnd;
 
-    @Value("${"+ Constants.ID_DELIMITER +"}")
+    @Value("${"+ Constants.SYSTEM_ID_DELIMITER +"}")
     private String idDelimiter;
 
     public HeartBeat convertToHeartBeat(byte[] data) {

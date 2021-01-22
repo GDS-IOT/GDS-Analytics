@@ -4,13 +4,13 @@ public class HeartBeat {
 
     private int startByte;
     private String systemId;
-    private int deviceId;
+    private String deviceId;
     private int deviceType;
     private int originRSSI;
     private int originNetworkLevel;
     private int hopCounter;
-    private int messageCounter;
-    private int latencyCounter;
+    private String messageCounter;
+    private String latencyCounter;
     private int packetType;
     private int messageType;
 
@@ -30,11 +30,11 @@ public class HeartBeat {
         this.systemId = systemId;
     }
 
-    public int getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(int deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
@@ -70,19 +70,19 @@ public class HeartBeat {
         this.hopCounter = hopCounter;
     }
 
-    public int getMessageCounter() {
+    public String getMessageCounter() {
         return messageCounter;
     }
 
-    public void setMessageCounter(int messageCounter) {
+    public void setMessageCounter(String messageCounter) {
         this.messageCounter = messageCounter;
     }
 
-    public int getLatencyCounter() {
+    public String getLatencyCounter() {
         return latencyCounter;
     }
 
-    public void setLatencyCounter(int latencyCounter) {
+    public void setLatencyCounter(String latencyCounter) {
         this.latencyCounter = latencyCounter;
     }
 
