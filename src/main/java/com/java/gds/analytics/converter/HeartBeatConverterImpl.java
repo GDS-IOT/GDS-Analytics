@@ -4,10 +4,12 @@ import com.java.gds.analytics.constants.Constants;
 import com.java.gds.analytics.dao.HeartBeatDao;
 import com.java.gds.analytics.domain.HeartBeat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@Qualifier("HeartBeatConverterImpl")
 public class HeartBeatConverterImpl implements Converter<HeartBeat> {
 
     @Autowired
@@ -74,8 +76,6 @@ public class HeartBeatConverterImpl implements Converter<HeartBeat> {
         hb.setLatencyCounter(getString(data, latencyCounterStart, latencyCounterEnd, systemIdDelimiter));
         hb.setPacketType((int) data[packetTypeIdx]);
         hb.setMessageType((int) data[messageTypeIdx]);
-
-        heartBeatDao.insertHeartBeat(hb);
 
         return hb;
     }

@@ -1,14 +1,12 @@
 package com.java.gds.analytics;
 
-import com.java.gds.analytics.constants.Constants;
-import com.java.gds.analytics.converter.HeartBeatConverterImpl;
-import com.java.gds.analytics.utils.GDSConverter;
+import com.java.gds.analytics.processor.GDSAnalyticsProcessor;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
@@ -18,7 +16,8 @@ public class GDSAnalytics {
     private static final Logger LOGGER = Logger.getLogger(GDSAnalytics.class);
 
     @Autowired
-    private HeartBeatConverterImpl converter;
+    private GDSAnalyticsProcessor kafkaProcessor;
+
 
     @PostConstruct
     public void initProperties() {
@@ -53,8 +52,8 @@ public class GDSAnalytics {
         // message Type
         data[17] = 9;
 
+        kafkaProcessor.processMessage();
 
-        System.out.println(converter.convert(data).toString());
     }
 
     public static void main(String[] args) {

@@ -55,4 +55,7 @@ public class Constants {
 
     public static final String DB_PASSWORD = "db.password";
 
+    // Events
+    public static final String HEART_BEAT_EVENT = "heart.beat.event";
+
 }
