@@ -34,6 +34,5 @@ public class GDSDeserializer<T> implements Deserializer<T> {
 
     @Override
     public void close() {
-
     }
 }
