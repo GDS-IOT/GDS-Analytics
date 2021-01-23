@@ -3,6 +3,7 @@ package com.gds.analytics.converter;
 import com.gds.analytics.constants.Constants;
 import com.gds.analytics.dao.HeartBeatDao;
 import com.gds.analytics.domain.HeartBeat;
+import com.gds.domain.GDSData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,8 +65,9 @@ public class HeartBeatConverterImpl implements Converter<HeartBeat> {
     private int messageTypeIdx;
 
     @Override
-    public HeartBeat convert(byte[] data) {
+    public HeartBeat convert(GDSData gdsData) {
         HeartBeat hb = new HeartBeat();
+        byte []data = gdsData.getGdsData();
         hb.setSystemId(getString(data, systemIdStart, systemIdEnd, systemIdDelimiter));
 //        hb.setDeviceId(getString(data, deviceIdStart, deviceIdEnd, systemIdDelimiter));
         hb.setDeviceType((int) data[deviceTypeIdx]);
@@ -76,6 +78,7 @@ public class HeartBeatConverterImpl implements Converter<HeartBeat> {
         hb.setLatencyCounter(getString(data, latencyCounterStart, latencyCounterEnd, systemIdDelimiter));
         hb.setPacketType((int) data[packetTypeIdx]);
         hb.setMessageType((int) data[messageTypeIdx]);
+        hb.setTs(gdsData.getTs());
 
         return hb;
     }

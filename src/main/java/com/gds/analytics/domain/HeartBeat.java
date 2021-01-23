@@ -13,6 +13,15 @@ public class HeartBeat {
     private String latencyCounter;
     private int packetType;
     private int messageType;
+    private String ts;
+
+    public String getTs() {
+        return ts;
+    }
+
+    public void setTs(String ts) {
+        this.ts = ts;
+    }
 
     public int getStartByte() {
         return startByte;

@@ -3,6 +3,7 @@ package com.gds.analytics.processor;
 import com.gds.analytics.converter.Converter;
 import com.gds.analytics.dao.HeartBeatDao;
 import com.gds.analytics.domain.HeartBeat;
+import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +21,7 @@ public class HeartBeatProcessor implements Processor {
     @Qualifier("HeartBeatConverterImpl")
     private Converter<HeartBeat> heartBeatConverter;
 
-    public void processData(byte[] data) {
+    public void processData(GDSData data) {
         HeartBeat hb = heartBeatConverter.convert(data);
         LOGGER.debug("HeartBeat event ".concat(hb.toString()));
         heartBeatDao.insertHeartBeat(hb);
