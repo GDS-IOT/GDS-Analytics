@@ -1,7 +1,9 @@
 package com.gds.analytics.processor;
 
+import com.gds.domain.GDSData;
+
 public interface Processor {
 
-    public void processData(byte[] data);
+    public void processData(GDSData data);
 
 }

@@ -2,6 +2,7 @@ package com.gds.analytics.events;
 
 import com.gds.analytics.processor.Processor;
 import com.gds.analytics.constants.Constants;
+import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +23,8 @@ public class EventFactory {
     private Processor heartBeatProcessor;
 
 
-    public void processEvent(String key, byte[] data) {
-        if(heartBeatEvent == data[pacTypeIdx]) {
+    public void processEvent(String key, GDSData data) {
+        if(heartBeatEvent == data.getGdsData()[pacTypeIdx]) {
             LOGGER.debug("HeartBeat Event Initiated.");
             heartBeatProcessor.processData(data);
         }
