@@ -21,8 +21,8 @@ public class HeartBeatDaoImpl implements HeartBeatDao {
 
     public void insertHeartBeat(HeartBeat heartBeat) {
         Connection con = db.getConnection();
-        String query = "insert into smt.hb_log(id_device, latency_counter, devicetype, rssi,timestamp" +
-                "network_level, hopcounter, pac_type, message_type) values (?,?,?,?,?,?,?,?,?)";
+        String query = "insert into smt.hb_log(id_device, latency_counter, devicetype, rssi," +
+                "network_level, hopcounter, pac_type, message_type, timestamp) values (?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, heartBeat.getSystemId());
