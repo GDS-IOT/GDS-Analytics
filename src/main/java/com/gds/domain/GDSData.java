@@ -1,6 +1,8 @@
 package com.gds.domain;
 
-public class GDSData {
+import java.io.Serializable;
+
+public class GDSData implements Serializable {
 
     private String ts;
     private byte[] gdsData;
