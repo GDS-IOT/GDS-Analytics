@@ -4,6 +4,6 @@ import com.gds.domain.GDSData;
 
 public interface Processor {
 
-    public void processData(GDSData data);
+    public void processData(GDSData gdsData);
 
 }

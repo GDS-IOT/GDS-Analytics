@@ -1,5 +1,6 @@
 package com.gds.analytics.events;
 
+import com.gds.analytics.constants.GDSEnum;
 import com.gds.analytics.processor.Processor;
 import com.gds.analytics.constants.Constants;
 import com.gds.domain.GDSData;
@@ -13,20 +14,33 @@ public class EventFactory {
 
     private static final Logger LOGGER = Logger.getLogger(EventFactory.class);
 
-    @Value("${"+ Constants.PACKET_TYPE_IDX +"}")
+    @Value("${" + Constants.PACKET_TYPE_IDX + "}")
     private int pacTypeIdx;
 
-    @Value("${"+Constants.HEART_BEAT_EVENT+"}")
+    @Value("${" + Constants.EVENT_ID_IDX + "}")
+    private int eventIdIdx;
+
+    @Value("${" + Constants.HEART_BEAT_EVENT + "}")
     private int heartBeatEvent;
 
     @Autowired
     private Processor heartBeatProcessor;
 
 
+
+
     public void processEvent(String key, GDSData data) {
-        if(heartBeatEvent == data.getGdsData()[pacTypeIdx]) {
+        if (heartBeatEvent == data.getGdsData()[pacTypeIdx]) {
             LOGGER.debug("HeartBeat Event Initiated.");
             heartBeatProcessor.processData(data);
+        } else {
+            int eventId = (int) data.getGdsData()[eventIdIdx];
+            LOGGER.debug("Event Id ".concat(String.valueOf(eventId)));
+            GDSEnum event = GDSEnum.getEventById(eventId);
+            switch (event) {
+                case WATER_LEVEL_STATUS:
+
+            }
         }
     }
 }
