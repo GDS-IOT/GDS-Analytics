@@ -33,13 +33,15 @@ public class HeartBeatDaoImpl implements HeartBeatDao {
             pst.setInt(6, heartBeat.getHopCounter());
             pst.setInt(7, heartBeat.getPacketType());
             pst.setInt(8, heartBeat.getMessageType());
-            pst.setTimestamp(9, Timestamp.valueOf(heartBeat.getTs()));
+            pst.setTimestamp(9, Timestamp.valueOf(heartBeat.getDateTime()));
             LOGGER.debug("Query :: ".concat(pst.toString()));
             if (pst.executeUpdate() == 0) {
                 LOGGER.debug("Unable to insert row ");
             }
         } catch (SQLException se) {
             LOGGER.error("Error occurred while inserting HeartBeat ", se);
+        }finally{
+            db.close();
         }
     }
 }

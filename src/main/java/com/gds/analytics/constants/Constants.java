@@ -1,12 +1,14 @@
 package com.gds.analytics.constants;
 
 /**
- * @Sujith Ramanathan
+ * @author Sujith Ramanathan
  */
-
 public class Constants {
 
     // HEART-BEAT-CONSTANTS
+
+    public static final String HB_VALUE_SKIP = "hb.value.skip";
+
     public static final String SYSTEM_ID_START = "system.id.start";
 
     public static final String SYSTEM_ID_END = "system.id.end";
@@ -16,8 +18,6 @@ public class Constants {
     public static final String DEVICE_ID_END = "device.id.end";
 
     public static final String SYSTEM_ID_DELIMITER = "system.id.delimiter";
-
-    public static final String HB_VALUE_SKIP = "hb.value.skip";
 
     public static final String DEVICE_TYPE_INDEX = "device.type.idx";
 
@@ -39,6 +39,10 @@ public class Constants {
 
     public static final String MESSAGE_TYPE_IDX = "message.type.idx";
 
+
+    // Water Level
+    public static final String WATER_LVL_PERCENTAGE_IDX = "water.lvl.percentage.idx";
+
     // Kafka Consumer
     public static final String KAFKA_TOPIC = "kafka.topic";
 
@@ -56,6 +60,10 @@ public class Constants {
     public static final String DB_PASSWORD = "db.password";
 
     // Events
+    public static final String EVENT_ID_IDX = "event.id.idx";
+
     public static final String HEART_BEAT_EVENT = "heart.beat.event";
+
+    public static final String WATER_LEVEL_EVENT_ID = "water.level.event.id";
 
 }
