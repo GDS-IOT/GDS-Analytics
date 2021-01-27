@@ -1,6 +1,7 @@
 package com.gds.analytics.processor;
 
 import com.gds.analytics.converter.Converter;
+import com.gds.analytics.dao.WaterLevelDao;
 import com.gds.analytics.domain.WaterLevelEvent;
 import com.gds.domain.GDSData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,13 @@ public class WaterLevelProcessor implements Processor{
     @Autowired
     private Converter<WaterLevelEvent> waterLevelConverter;
 
+    @Autowired
+    private WaterLevelDao waterLevelDao;
+
     @Override
     public void processData(GDSData gdsData) {
-        waterLevelConverter.convert(gdsData);
+        WaterLevelEvent waterLevelEvent = waterLevelConverter.convert(gdsData);
+        waterLevelDao.insertWaterLvlData(waterLevelEvent);
     }
 }
 
