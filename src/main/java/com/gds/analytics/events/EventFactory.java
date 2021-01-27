@@ -25,11 +25,11 @@ public class EventFactory {
     private int heartBeatEvent;
 
     @Autowired
-    @Qualifier("HeartBeatProcessor")
+    @Qualifier("heartBeatProcessor")
     private Processor heartBeatProcessor;
 
     @Autowired
-    @Qualifier("WaterLevelProcessor")
+    @Qualifier("waterLevelProcessor")
     private Processor waterLevelProcessor;
 
     public void processEvent(String key, GDSData data) {

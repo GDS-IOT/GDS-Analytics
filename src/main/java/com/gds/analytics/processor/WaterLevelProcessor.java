@@ -6,11 +6,13 @@ import com.gds.analytics.domain.WaterLevelEvent;
 import com.gds.domain.GDSData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Sujith Ramanathan
  */
-@Qualifier("WaterLevelProcessor")
+@Service
+@Qualifier("waterLevelProcessor")
 public class WaterLevelProcessor implements Processor {
 
     @Autowired

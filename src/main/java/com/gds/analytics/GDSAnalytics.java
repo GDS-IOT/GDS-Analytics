@@ -1,7 +1,5 @@
 package com.gds.analytics;
 
-import com.gds.analytics.dao.WaterLevelDao;
-import com.gds.analytics.domain.WaterLevelEvent;
 import com.gds.analytics.processor.GDSAnalyticsProcessor;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -19,9 +17,6 @@ public class GDSAnalytics {
     @Autowired
     private GDSAnalyticsProcessor gdsAnalyticsProcessor;
 
-    @Autowired
-    private WaterLevelDao waterLevelDao;
-
     @PostConstruct
     public void initProperties() {
         PropertyConfigurator.configure(this.getClass().getClassLoader().getResourceAsStream("log4j.properties"));
@@ -37,7 +32,12 @@ public class GDSAnalytics {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(GDSAnalytics.class, args);
+
+        try {
+            SpringApplication.run(GDSAnalytics.class, args);
+        } catch (Exception e) {
+            LOGGER.error("Error while starting up the application ", e);
+        }
     }
 
 }
