@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier("HeartBeatProcessor")
+@Qualifier("heartBeatProcessor")
 public class HeartBeatProcessor implements Processor {
 
     private static final Logger LOGGER = Logger.getLogger(HeartBeatProcessor.class);

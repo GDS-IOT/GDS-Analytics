@@ -69,6 +69,7 @@ public class GDSAnalyticsProcessor {
                 }
                 consumer.commitAsync();
             }catch(Exception e){
+                e.printStackTrace();
                 LOGGER.error("Error occured while processing events. ",e);
                 consumer.close();
                 flag=false;
