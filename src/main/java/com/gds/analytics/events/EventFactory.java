@@ -26,6 +26,9 @@ public class EventFactory {
     @Autowired
     private Processor heartBeatProcessor;
 
+    @Autowired
+    private Processor waterLevelProcessor;
+
 
 
 
