@@ -6,6 +6,7 @@ import com.gds.analytics.constants.Constants;
 import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +25,12 @@ public class EventFactory {
     private int heartBeatEvent;
 
     @Autowired
+    @Qualifier("HeartBeatProcessor")
     private Processor heartBeatProcessor;
 
     @Autowired
+    @Qualifier("WaterLevelProcessor")
     private Processor waterLevelProcessor;
-
-
-
 
     public void processEvent(String key, GDSData data) {
         if (heartBeatEvent == data.getGdsData()[pacTypeIdx]) {
@@ -43,7 +43,8 @@ public class EventFactory {
             LOGGER.debug("event.toString() "+event);
             switch (event) {
                 case WATER_LEVEL_STATUS:
-                waterLevelProcessor.processData(data);
+                    waterLevelProcessor.processData(data);
+                    break;
             }
         }
     }
