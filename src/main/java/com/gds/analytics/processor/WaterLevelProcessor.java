@@ -5,10 +5,12 @@ import com.gds.analytics.dao.WaterLevelDao;
 import com.gds.analytics.domain.WaterLevelEvent;
 import com.gds.domain.GDSData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * @author Sujith Ramanathan
  */
+@Qualifier("WaterLevelProcessor")
 public class WaterLevelProcessor implements Processor {
 
     @Autowired

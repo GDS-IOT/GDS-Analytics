@@ -54,14 +54,13 @@ public class GDSAnalyticsProcessor {
     }
 
     public void processMessage() {
-        LOGGER.debug("KafkaConsumer Listening for messages");
+        LOGGER.debug("KafkaConsumer Listening for messages ");
         consumer.subscribe(Collections.singletonList(topicName));
         boolean flag = true;
         ConsumerRecords<String, GDSData> consumerRecords;
         while(flag) {
             try {
-                consumerRecords = consumer.poll(Duration.ofSeconds(1000));
-
+                consumerRecords = consumer.poll(Duration.ofSeconds(5));
                 if (0 == consumerRecords.count())
                     continue;
 
