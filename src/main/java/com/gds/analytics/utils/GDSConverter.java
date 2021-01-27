@@ -26,7 +26,6 @@ public class GDSConverter {
     private String delimitedValue(byte[] data, int startByte, int endByte, String delimiter) {
         String value="";
         for(int i=startByte; i<=endByte;i++){
-            System.out.println("data["+i+"] = "+(int)data[i]);
             value = value.concat(String.valueOf((int) data[i])).concat(delimiter);
         }
         return value;
