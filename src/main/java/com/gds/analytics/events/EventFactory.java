@@ -40,9 +40,10 @@ public class EventFactory {
             int eventId = (int) data.getGdsData()[eventIdIdx];
             LOGGER.debug("Event Id ".concat(String.valueOf(eventId)));
             GDSEnum event = GDSEnum.getEventById(eventId);
+            LOGGER.debug("event.toString() "+event);
             switch (event) {
                 case WATER_LEVEL_STATUS:
-
+                waterLevelProcessor.processData(data);
             }
         }
     }

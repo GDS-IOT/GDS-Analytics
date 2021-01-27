@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author Sujith Ramanathan
  */
-public class WaterLevelProcessor implements Processor{
+public class WaterLevelProcessor implements Processor {
 
     @Autowired
     private Converter<WaterLevelEvent> waterLevelConverter;
