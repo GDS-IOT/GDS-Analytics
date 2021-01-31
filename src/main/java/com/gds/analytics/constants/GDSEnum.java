@@ -8,7 +8,8 @@ import java.util.Map;
  */
 public enum GDSEnum {
 
-    WATER_LEVEL_STATUS(69, "Water_Level_Status");
+    WATER_LEVEL_STATUS(69, "Water_Level_Status"),
+    DEFAULT(0,"No_Action_Or_Not_a_valid_event");
 
     private int eventId;
     private String value;
