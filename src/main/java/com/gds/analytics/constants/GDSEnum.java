@@ -9,32 +9,32 @@ import java.util.Map;
 public enum GDSEnum {
 
     WATER_LEVEL_STATUS(69, "Water_Level_Status"),
-    DEFAULT(0,"No_Action_Or_Not_a_valid_event");
+    DEFAULT(0, "No_Action_Or_Not_a_valid_event");
 
     private int eventId;
     private String value;
 
     private static final Map<Integer, GDSEnum> eventMap = new HashMap<Integer, GDSEnum>();
 
-    GDSEnum(int eventId, String value){
+    GDSEnum(int eventId, String value) {
         this.eventId = eventId;
         this.value = value;
     }
 
-    public int getEventId(){
+    public int getEventId() {
         return eventId;
     }
 
-    public String getValue(){
+    public String getValue() {
         return value;
     }
 
-    public static GDSEnum getEventById(int eventId){
+    public static GDSEnum getEventById(int eventId) {
         return eventMap.get(eventId);
     }
 
     static {
-        for(GDSEnum kv : GDSEnum.values()){
+        for (GDSEnum kv : GDSEnum.values()) {
             eventMap.put(kv.getEventId(), kv);
         }
     }
