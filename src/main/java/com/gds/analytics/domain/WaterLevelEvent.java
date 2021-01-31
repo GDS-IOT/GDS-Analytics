@@ -35,12 +35,14 @@ public class WaterLevelEvent extends GDSBase {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("WaterLevel{");
+        final StringBuilder sb = new StringBuilder("WaterLevelEvent{");
         sb.append("txnId=").append(txnId);
         sb.append(", eventId=").append(eventId);
         sb.append(", waterLevelPercentage=").append(waterLevelPercentage);
+        sb.append(", waterLvlPercentageList=").append(waterLvlPercentageList);
         sb.append(", startByte=").append(startByte);
         sb.append(", systemId='").append(systemId).append('\'');
+        sb.append(", systemIdAsInt=").append(systemIdAsInt);
         sb.append(", deviceId='").append(deviceId).append('\'');
         sb.append(", deviceType=").append(deviceType);
         sb.append(", originRSSI=").append(originRSSI);
@@ -50,7 +52,7 @@ public class WaterLevelEvent extends GDSBase {
         sb.append(", latencyCounter='").append(latencyCounter).append('\'');
         sb.append(", packetType=").append(packetType);
         sb.append(", messageType=").append(messageType);
-        sb.append(", ts='").append(dateTime).append('\'');
+        sb.append(", dateTime='").append(dateTime).append('\'');
         sb.append('}');
         return sb.toString();
     }

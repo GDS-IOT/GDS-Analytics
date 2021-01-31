@@ -4,6 +4,7 @@ public abstract class GDSBase {
 
     protected int startByte;
     protected String systemId;
+    protected int systemIdAsInt;
     protected String deviceId;
     protected int deviceType;
     protected int originRSSI;
@@ -37,6 +38,14 @@ public abstract class GDSBase {
 
     public void setSystemId(String systemId) {
         this.systemId = systemId;
+    }
+
+    public int getSystemIdAsInt() {
+        return systemIdAsInt;
+    }
+
+    public void setSystemIdAsInt(int systemIdAsInt) {
+        this.systemIdAsInt = systemIdAsInt;
     }
 
     public String getDeviceId() {
