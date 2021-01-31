@@ -61,10 +61,11 @@ public abstract class Converter<T> {
     public String getString(byte[] data, int startIndex, int endIndex, String delimiter, int invalidValue) {
         String value = "";
         for (int i = startIndex; i <= endIndex; i++) {
-            if((int) data[i] != invalidValue)
-                value = value.concat(delimiter).concat(String.valueOf((int)data[i]));
+            if ((int) data[i] != invalidValue) {
+                value = value.concat(delimiter).concat(String.valueOf((int) data[i]));
+            }
         }
-        if("".equals(value)){
+        if ("".equals(value)) {
             for (int i = startIndex; i <= endIndex; i++) {
                 value = value.concat(delimiter).concat("0");
             }
@@ -72,9 +73,10 @@ public abstract class Converter<T> {
         return value.replaceFirst(delimiter, "");
     }
 
-    protected void setBaseData(GDSBase gdsBase, GDSData gdsData){
-        byte []data = gdsData.getGdsData();
+    protected void setBaseData(GDSBase gdsBase, GDSData gdsData) {
+        byte[] data = gdsData.getGdsData();
         gdsBase.setSystemId(getString(data, systemIdStart, systemIdEnd, systemIdDelimiter, invalidValue));
+        gdsBase.setSystemIdAsInt(Integer.parseInt(gdsBase.getSystemId().replaceAll(systemIdDelimiter, "")));
         gdsBase.setDeviceType((int) data[deviceTypeIdx]);
         gdsBase.setOriginRSSI((int) data[originRSSIIdx]);
         gdsBase.setOriginNetworkLevel((int) data[originNetworkLevelIdx]);
