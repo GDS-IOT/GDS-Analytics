@@ -40,8 +40,8 @@ public class EventFactory {
             int eventId = (int) data.getGdsData()[eventIdIdx];
             LOGGER.debug("Event Id ".concat(String.valueOf(eventId)));
             GDSEnum event = GDSEnum.getEventById(eventId);
-            LOGGER.debug("event.toString() "+event);
-            if(null == null){
+            LOGGER.debug("event.toString() " + event);
+            if (null == event) {
                 event = GDSEnum.DEFAULT;
             }
             switch (event) {
