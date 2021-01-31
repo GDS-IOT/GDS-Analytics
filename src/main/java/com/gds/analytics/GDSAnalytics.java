@@ -5,6 +5,7 @@ import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,7 @@ public class GDSAnalytics {
         PropertyConfigurator.configure(this.getClass().getClassLoader().getResourceAsStream("log4j.properties"));
         LOGGER.debug("GDS-Analytics Init Properties - Success ");
         gdsAnalyticsProcessor.processMessage();
+
 
 //        WaterLevelEvent waterLevelEvent = new WaterLevelEvent();
 //        waterLevelEvent.setWaterLevelPercentage(108);
@@ -81,6 +83,15 @@ public class GDSAnalytics {
 
 
 //        process.processData(gdsData);
+    }
+
+    public static void main(String[] args) {
+
+        try {
+            SpringApplication.run(GDSAnalytics.class, args);
+        } catch (Exception e) {
+            LOGGER.error("Error while starting up the application ", e);
+        }
     }
 
 }
