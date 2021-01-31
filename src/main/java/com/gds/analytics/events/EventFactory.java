@@ -41,10 +41,15 @@ public class EventFactory {
             LOGGER.debug("Event Id ".concat(String.valueOf(eventId)));
             GDSEnum event = GDSEnum.getEventById(eventId);
             LOGGER.debug("event.toString() "+event);
+            if(null == null){
+                event = GDSEnum.DEFAULT;
+            }
             switch (event) {
                 case WATER_LEVEL_STATUS:
                     waterLevelProcessor.processData(data);
                     break;
+                case DEFAULT:
+                    LOGGER.error("Not a valid event");
             }
         }
     }

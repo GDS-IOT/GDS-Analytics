@@ -1,10 +1,13 @@
 package com.gds.analytics.domain;
 
+import java.util.List;
+
 public class WaterLevelEvent extends GDSBase {
 
     private long txnId;
     private int eventId;
     private int waterLevelPercentage;
+    private List<Integer> waterLvlPercentageList;
 
     public long getTxnId() {
         return txnId;
