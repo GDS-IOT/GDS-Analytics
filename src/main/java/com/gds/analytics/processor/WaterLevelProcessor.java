@@ -3,6 +3,7 @@ package com.gds.analytics.processor;
 import com.gds.analytics.converter.Converter;
 import com.gds.analytics.dao.WaterLevelDao;
 import com.gds.analytics.domain.WaterLevelEvent;
+import com.gds.analytics.engine.BackgroundEngine;
 import com.gds.domain.GDSData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,15 +22,12 @@ public class WaterLevelProcessor implements Processor {
     @Autowired
     private WaterLevelDao waterLevelDao;
 
+    private BackgroundEngine<WaterLevelEvent> waterLevelEngine;
+
     @Override
     public void processData(GDSData gdsData) {
         WaterLevelEvent waterLevelEvent = waterLevelConverter.convert(gdsData);
         waterLevelDao.insertWaterLvlData(waterLevelEvent);
+        waterLevelEngine.runBackground(waterLevelEvent);
     }
 }
-
-// select * from smt.sow_event_transaction set2
-
-// select * from smt.sow_event_transaction_meta setm
-
-// select * from smt.sow_event_mapping sem
