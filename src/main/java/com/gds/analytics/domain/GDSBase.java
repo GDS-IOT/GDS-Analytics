@@ -6,6 +6,7 @@ public abstract class GDSBase {
     protected String systemId;
     protected int systemIdAsInt;
     protected String deviceId;
+    protected int deviceIdAsInt;
     protected int deviceType;
     protected int originRSSI;
     protected int originNetworkLevel;
@@ -34,6 +35,14 @@ public abstract class GDSBase {
 
     public String getSystemId() {
         return systemId;
+    }
+
+    public int getDeviceIdAsInt() {
+        return deviceIdAsInt;
+    }
+
+    public void setDeviceIdAsInt(int deviceIdAsInt) {
+        this.deviceIdAsInt = deviceIdAsInt;
     }
 
     public void setSystemId(String systemId) {
@@ -120,4 +129,24 @@ public abstract class GDSBase {
         this.messageType = messageType;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GDSBase{");
+        sb.append("startByte=").append(startByte);
+        sb.append(", systemId='").append(systemId).append('\'');
+        sb.append(", systemIdAsInt=").append(systemIdAsInt);
+        sb.append(", deviceId='").append(deviceId).append('\'');
+        sb.append(", deviceIdAsInt=").append(deviceIdAsInt);
+        sb.append(", deviceType=").append(deviceType);
+        sb.append(", originRSSI=").append(originRSSI);
+        sb.append(", originNetworkLevel=").append(originNetworkLevel);
+        sb.append(", hopCounter=").append(hopCounter);
+        sb.append(", messageCounter='").append(messageCounter).append('\'');
+        sb.append(", latencyCounter='").append(latencyCounter).append('\'');
+        sb.append(", packetType=").append(packetType);
+        sb.append(", messageType=").append(messageType);
+        sb.append(", dateTime='").append(dateTime).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
