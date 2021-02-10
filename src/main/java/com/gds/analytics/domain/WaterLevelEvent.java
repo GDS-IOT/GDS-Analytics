@@ -44,6 +44,7 @@ public class WaterLevelEvent extends GDSBase {
         sb.append(", systemId='").append(systemId).append('\'');
         sb.append(", systemIdAsInt=").append(systemIdAsInt);
         sb.append(", deviceId='").append(deviceId).append('\'');
+        sb.append(", deviceIdAsInt=").append(deviceIdAsInt);
         sb.append(", deviceType=").append(deviceType);
         sb.append(", originRSSI=").append(originRSSI);
         sb.append(", originNetworkLevel=").append(originNetworkLevel);
