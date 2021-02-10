@@ -58,12 +58,10 @@ public abstract class Converter<T> {
     @Value("${" + Constants.MESSAGE_TYPE_IDX + "}")
     protected int messageTypeIdx;
 
-    public String getString(byte[] data, int startIndex, int endIndex, String delimiter, int invalidValue) {
+    public String getString(byte[] data, int startIndex, int endIndex, String delimiter) {
         String value = "";
         for (int i = startIndex; i <= endIndex; i++) {
-            if ((int) data[i] != invalidValue) {
-                value = value.concat(delimiter).concat(String.valueOf((int) data[i]));
-            }
+            value = value.concat(delimiter).concat(String.valueOf((int) data[i]));
         }
         if ("".equals(value)) {
             for (int i = startIndex; i <= endIndex; i++) {
@@ -75,13 +73,15 @@ public abstract class Converter<T> {
 
     protected void setBaseData(GDSBase gdsBase, GDSData gdsData) {
         byte[] data = gdsData.getGdsData();
-        gdsBase.setSystemId(getString(data, systemIdStart, systemIdEnd, systemIdDelimiter, invalidValue));
+        gdsBase.setSystemId(getString(data, systemIdStart, systemIdEnd, systemIdDelimiter));
         gdsBase.setSystemIdAsInt(Integer.parseInt(gdsBase.getSystemId().replaceAll(systemIdDelimiter, "")));
+        gdsBase.setDeviceId(getString(data, deviceIdStart, deviceIdEnd, systemIdDelimiter));
+        gdsBase.setDeviceIdAsInt(Integer.parseInt(gdsBase.getDeviceId().replaceAll(systemIdDelimiter, "")));
         gdsBase.setDeviceType((int) data[deviceTypeIdx]);
         gdsBase.setOriginRSSI((int) data[originRSSIIdx]);
         gdsBase.setOriginNetworkLevel((int) data[originNetworkLevelIdx]);
         gdsBase.setHopCounter((int) data[hopCounterIdx]);
-        gdsBase.setLatencyCounter(getString(data, latencyCounterStart, latencyCounterEnd, systemIdDelimiter, invalidValue));
+        gdsBase.setLatencyCounter(getString(data, latencyCounterStart, latencyCounterEnd, systemIdDelimiter));
         gdsBase.setPacketType((int) data[packetTypeIdx]);
         gdsBase.setMessageType((int) data[messageTypeIdx]);
         gdsBase.setDateTime(gdsData.getTs());

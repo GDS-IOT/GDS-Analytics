@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.sql.*;
 
 /**
@@ -89,7 +88,7 @@ public class WaterLevelDaoImpl implements WaterLevelDao {
 
 
             LOGGER.debug("waterLevelEventData.getDeviceType() "+waterLevelEventData.getDeviceType());
-            LOGGER.debug("waterLevelEventData.getSystemId() "+waterLevelEventData.getSystemIdAsInt());
+            LOGGER.debug("waterLevelEventData.getSystemIdAsInt() "+waterLevelEventData.getSystemIdAsInt());
             LOGGER.debug("waterLevelEventData.getEventId "+waterLevelEventData.getEventId());
 
             LOGGER.debug("waterLevelEvent.toString() ".concat(waterLevelEventData.toString()));
