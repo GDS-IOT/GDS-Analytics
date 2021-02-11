@@ -83,12 +83,12 @@ public class WaterLevelDaoImpl implements WaterLevelDao {
             Connection con = db.getConnection();
             PreparedStatement pst = con.prepareStatement(waterLvlEvtQuery);
             pst.setInt(1, waterLevelEventData.getDeviceType());
-            pst.setString(2, String.valueOf(waterLevelEventData.getSystemIdAsInt()));
+            pst.setString(2, String.valueOf(waterLevelEventData.getDeviceIdAsInt()));
             pst.setString(3, String.valueOf(waterLevelEventData.getEventId()));
 
 
             LOGGER.debug("waterLevelEventData.getDeviceType() "+waterLevelEventData.getDeviceType());
-            LOGGER.debug("waterLevelEventData.getSystemIdAsInt() "+waterLevelEventData.getSystemIdAsInt());
+            LOGGER.debug("waterLevelEventData.getDeviceIdAsInt() "+waterLevelEventData.getDeviceIdAsInt());
             LOGGER.debug("waterLevelEventData.getEventId "+waterLevelEventData.getEventId());
 
             LOGGER.debug("waterLevelEvent.toString() ".concat(waterLevelEventData.toString()));
