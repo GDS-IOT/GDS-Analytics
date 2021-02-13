@@ -57,22 +57,30 @@ public class WaterLevelApi {
         HttpHeaders headers = getHeaders();
 
         HttpEntity<String> request = new HttpEntity<String>(payload, headers);
-        LOGGER.debug(
-                request.toString() + "\n" +
-                        ruleUrl
-        );
-        ResponseEntity<String> val = restTemplate.exchange(ruleUrl, HttpMethod.POST, request, String.class);
-
-        JSONObject respJson = null;
-        try {
-            respJson = (JSONObject) parser.parse(val.getBody());
-        } catch (ParseException e) {
-            LOGGER.error("Error occurred while parsing rule json Api ", e);
-            return null;
+        LOGGER.debug("Get Pattern "+payload);
+        ResponseEntity<String> val = null;
+        try{
+            val = restTemplate.exchange(ruleUrl, HttpMethod.POST, request, String.class);
+        }catch(Exception e){
+            LOGGER.error("Error while occurred getting water level pattern", e);
         }
-        if (HttpStatus.OK == respJson.get(STATUS_ID)) {
-            LOGGER.debug("Water Level Rule success");
-            return (String) respJson.get(WATER_LEVEL_PATTERN);
+        if(null!=val) {
+            LOGGER.debug("Rsponse received :: " + val.getBody());
+            JSONObject respJson = null;
+            try {
+                respJson = (JSONObject) parser.parse(val.getBody());
+            } catch (ParseException e) {
+                LOGGER.error("Error occurred while parsing rule json Api ", e);
+                return null;
+            }
+            if (HttpStatus.OK == respJson.get(STATUS_ID)) {
+                LOGGER.debug("Water Level Rule success");
+                return (String) respJson.get(WATER_LEVEL_PATTERN);
+            } else {
+                LOGGER.debug("Water Level Pattern API Failed");
+            }
+        }else{
+            LOGGER.debug("Water Level Pattern API returned null");
         }
         return null;
     }
