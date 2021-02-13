@@ -72,8 +72,7 @@ public class WaterLevelApi {
             try {
                 respJson = (JSONObject) parser.parse(val.getBody());
                 LOGGER.debug("Successfully parsing completed");
-                LOGGER.debug("Checking instance "+(respJson.get(STATUS_ID) instanceof Integer));
-                if (HttpStatus.OK.value() == (int)respJson.get(STATUS_ID)) {
+                if (HttpStatus.OK.value() == ((Long)respJson.get(STATUS_ID)).intValue()) {
                     LOGGER.debug("Water Level Rule success");
                     return (String) respJson.get(WATER_LEVEL_PATTERN);
                 } else {
@@ -109,7 +108,7 @@ public class WaterLevelApi {
                 LOGGER.error("Error while parsing json ", pe);
                 return false;
             }
-            if (HttpStatus.OK.value() == (int)resp.get(STATUS_ID)) {
+            if (HttpStatus.OK.value() == ((Long)resp.get(STATUS_ID)).intValue()) {
                 LOGGER.debug("Successfully water level event sent");
                 return true;
             }
