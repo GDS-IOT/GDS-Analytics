@@ -58,7 +58,7 @@ public class GDSAnalyticsProcessor {
         consumer.subscribe(Collections.singletonList(topicName));
         boolean flag = true;
         ConsumerRecords<String, GDSData> consumerRecords;
-        while(flag) {
+        while (flag) {
             try {
                 consumerRecords = consumer.poll(Duration.ofSeconds(5));
                 if (0 == consumerRecords.count())
@@ -68,12 +68,13 @@ public class GDSAnalyticsProcessor {
                     eventFactory.processEvent(record.key(), record.value());
                 }
                 consumer.commitAsync();
-            }catch(Exception e){
-                e.printStackTrace();
-                LOGGER.error("Error occured while processing events. ",e);
+            } catch (ArrayIndexOutOfBoundsException aiobe) {
+                LOGGER.error("Not enough packets to process", aiobe);
+            } catch (Exception e) {
+                LOGGER.error("Error occured while processing events. ", e);
                 consumer.close();
-                flag=false;
-                LOGGER.error("Shutting down kafka processor");
+//                flag = false;
+//                LOGGER.error("Shutting down kafka processor");
             }
         }
     }

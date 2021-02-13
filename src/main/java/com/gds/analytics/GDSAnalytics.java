@@ -7,8 +7,12 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
 
 @SpringBootApplication
 public class GDSAnalytics {
@@ -34,7 +38,6 @@ public class GDSAnalytics {
 //        waterLevelDao.insertWaterLvlData(waterLevelEvent);
 
 //        test();
-
 
     }
 
@@ -92,6 +95,13 @@ public class GDSAnalytics {
         } catch (Exception e) {
             LOGGER.error("Error while starting up the application ", e);
         }
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder){
+        return builder.setConnectTimeout(Duration.ofSeconds(10))
+                .setReadTimeout(Duration.ofSeconds(10))
+                .build();
     }
 
 }

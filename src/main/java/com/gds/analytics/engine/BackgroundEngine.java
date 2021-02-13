@@ -7,15 +7,15 @@ public abstract class BackgroundEngine<T> {
 
     protected String threadName;
 
-    public void runBackground(T event) {
+    public void runBackground(T event, long ts) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                analyze(event);
+                analyze(event, ts);
             }
         }, threadName);
     }
 
-    protected abstract void analyze(T object);
+    protected abstract void analyze(T object, long ts);
 
 }

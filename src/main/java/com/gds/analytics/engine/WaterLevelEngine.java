@@ -1,130 +1,336 @@
 package com.gds.analytics.engine;
 
 import com.gds.analytics.domain.WaterLevelEvent;
+import com.gds.analytics.domain.WaterLevelSeries;
+import com.gds.analytics.http.WaterLevelApi;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-
 /**
+ *
  * @author Sujith Ramanathan
+ *
+ * Version 1
+ *
  */
 @Component
-public class WaterLevelEngine extends BackgroundEngine<WaterLevelEvent> {
-
-    private List<Integer> wlList;
-
-    /** Default value will be 1 which will check for increase to stable **/
-    private volatile int ruleType = 0;
-    private static final int THRESHOLD = 3;
+public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
 
     private static final Logger LOGGER = Logger.getLogger(WaterLevelEngine.class);
 
-    public WaterLevelEngine() {
-        this.wlList = new ArrayList<Integer>();
+    @Autowired
+    private WaterLevelApi waterLevelApi;
+
+    private static final int MINIMUM_PACKETES_TO_CONFIRM = 6;
+    private static final int TRIGGER_THRESHOLD_SIZE = 3;
+    private static final int THRESHOLD_TIME = -15;
+    private static final int DEFAULT_PACKET_SIZE = 10;
+    private static final int ROTATIONAL_PACKET_SIZE = DEFAULT_PACKET_SIZE - 1;
+
+    private void analyzeWaterLevelSeries(WaterLevelSeries waterLevelSeries, long latestTs) {
+        long thresholdTime = getThresholdTime(latestTs);
+//		List<WaterLevelEvent> filteredData = waterLevelSeries.getWaterLevelPercentageSeries().stream()
+//				.filter(wls -> wls.getTs() >= thresholdTime && wls.getTs() <= latestTs).collect(Collectors.toList());
+
+        List<WaterLevelEvent> filteredData = new ArrayList<WaterLevelEvent>();
+
+        for (WaterLevelEvent data : waterLevelSeries.getWaterLevelSeries()) {
+            if (data.getTs() >= thresholdTime && data.getTs() <= latestTs) {
+                filteredData.add(data);
+            } else {
+                LOGGER.debug(
+                        "analyzeWaterLevelSeries() :: Resetting data as timestamp constraint violated data.getTs() "
+                                + data.getTs() + ", ThresholdTs " + thresholdTime);
+                waterLevelSeries.reset();
+                filteredData.add(data);
+            }
+        }
+
+        analyze(filteredData, waterLevelSeries);
+    }
+
+    private void analyze(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+        checkStableToIncrease(filteredData, waterLevelSeries);
+        checkincreaseToStable(filteredData, waterLevelSeries);
+
+        checkStableToStable(filteredData, waterLevelSeries);
+
+        checkStableToDecrease(filteredData, waterLevelSeries);
+        checkDecreaseToStable(filteredData, waterLevelSeries);
+    }
+
+    private void checkStableToIncrease(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+        LOGGER.debug("CheckIncrease () :: isIncreaseTriggered() " + waterLevelSeries.isStableToIncrease());
+        if (!waterLevelSeries.isStableToIncrease()) {
+            int filteredDataSize = filteredData.size();
+            LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+                    + MINIMUM_PACKETES_TO_CONFIRM);
+            if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
+                int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                int triggerCount = 0;
+                int waterLevel = 0;
+
+                for (int i = 1; i < filteredDataSize; i++) {
+                    waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                    LOGGER.debug("WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
+
+                    if (waterLevel > defaultWaterLevel) {
+                        defaultWaterLevel = waterLevel;
+                        ++triggerCount;
+                    }
+                    if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                        LOGGER.debug("3 packetes were increased");
+                        break;
+                    }
+                }
+
+                if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                    defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                    triggerCount = 0;
+                    waterLevel = 0;
+                    int beginningWaterLevel = 0;
+                    for (int i = 1; i < filteredDataSize; i++) {
+                        waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                        if (waterLevel > defaultWaterLevel) {
+                            beginningWaterLevel = beginningWaterLevel == 0 ? waterLevel : beginningWaterLevel;
+                            defaultWaterLevel = waterLevel;
+                            ++triggerCount;
+                            if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+                                LOGGER.debug(
+                                        "Water level increased ::: water level increased from " + beginningWaterLevel);
+                                String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
+                                if(null != pattern) {
+                                    if(waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                        waterLevelSeries.setStableToIncrease(true);
+                                        waterLevelSeries.setStableTriggered(false);
+                                    }else{
+                                        LOGGER.debug("Water level not triggered");
+                                    }
+                                }else{
+                                    LOGGER.debug("Water level rule returned null");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            LOGGER.debug("Water level increase not stopped yet.");
+        }
+    }
+
+    private void checkincreaseToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+        LOGGER.debug("checkincreaseToStable () :: isIncreaseToStableTriggered() "
+                + waterLevelSeries.isIncreaseToStableTriggered());
+        if (!waterLevelSeries.isIncreaseToStableTriggered()) {
+            int filteredDataSize = filteredData.size();
+            LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+                    + MINIMUM_PACKETES_TO_CONFIRM);
+            if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
+                int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                int triggerCount = 0;
+                int waterLevel = 0;
+
+                for (int i = 1; i < filteredDataSize; i++) {
+                    waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                    LOGGER.debug("WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
+
+                    if (triggerCount <= TRIGGER_THRESHOLD_SIZE && waterLevel > defaultWaterLevel) {
+                        defaultWaterLevel = waterLevel;
+                        ++triggerCount;
+                    }
+                    if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                        LOGGER.debug("3 packetes were increased");
+                        break;
+                    }
+                }
+
+                if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                    defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                    triggerCount = 0;
+                    waterLevel = 0;
+                    int beginningWaterLevel = 0;
+                    for (int i = 0; i < filteredDataSize; i++) {
+                        waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                        if (waterLevel > defaultWaterLevel && triggerCount <= 3) {
+                            beginningWaterLevel = defaultWaterLevel;
+                            ++triggerCount;
+                            defaultWaterLevel = waterLevel;
+                        }
+
+                        if (triggerCount > 3 && waterLevel == defaultWaterLevel) {
+                            ++triggerCount;
+                        }
+                        if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+                            LOGGER.debug("Inc To Stable ");
+                            LOGGER.debug("Break " + beginningWaterLevel);
+                            String pattern = waterLevelApi.isValidAction("Level_Increase_to_Stable");
+                            if(null != pattern) {
+                                if(waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                    waterLevelSeries.setStableToIncrease(false);
+                                    waterLevelSeries.setStableTriggered(false);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            LOGGER.debug("Water level increase not stopped yet.");
+        }
+    }
+
+    private void checkStableToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+        LOGGER.debug("checkStableToStable () ");
+        int defaultWaterLevel = 0, waterLevel = filteredData.get(0).getWaterLevelPercentage(),
+                filteredDataSize = filteredData.size(), triggerCount = 0;
+        for (int i = 1; i < filteredDataSize; i++) {
+            if (defaultWaterLevel == filteredData.get(i).getWaterLevelPercentage()) {
+                ++triggerCount;
+            }
+        }
+        LOGGER.debug("Trigger Count :: " + triggerCount + ", filteredDataSize :: " + filteredDataSize);
+        if (filteredDataSize >= triggerCount) {
+            waterLevelSeries.reset();
+            LOGGER.debug("Stable to Stable triggered and restted");
+        }
+    }
+
+    private void checkStableToDecrease(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+        LOGGER.debug(
+                "checkDecrease () :: isStableToDecreaseTriggered() " + waterLevelSeries.isStableToDecreaseTriggered());
+        if (!waterLevelSeries.isStableToDecreaseTriggered()) {
+            int filteredDataSize = filteredData.size();
+            LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+                    + MINIMUM_PACKETES_TO_CONFIRM);
+            if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
+                int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                int triggerCount = 0;
+                int waterLevel = 0;
+
+                for (int i = 1; i < filteredDataSize; i++) {
+                    waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                    LOGGER.debug("WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
+                    if (waterLevel < defaultWaterLevel) {
+                        defaultWaterLevel = waterLevel;
+                        ++triggerCount;
+                    }
+                    if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                        LOGGER.debug("3 packetes were decreased");
+                        break;
+                    }
+                }
+
+                if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                    defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                    triggerCount = 0;
+                    waterLevel = 0;
+                    int decreasingWaterLevel = 0;
+                    for (int i = 1; i < filteredDataSize; i++) {
+                        waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                        if (waterLevel < defaultWaterLevel) {
+                            decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
+                            defaultWaterLevel = waterLevel;
+                            ++triggerCount;
+                            if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+                                LOGGER.debug("water level decreased from " + decreasingWaterLevel);
+                                String pattern = waterLevelApi.isValidAction("Level_Stable_to_Decrease");
+                                if(null != pattern) {
+                                    if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                        waterLevelSeries.setStableToDecreaseTriggered(true);
+                                        waterLevelSeries.setDecreaseToStableTriggered(false);
+                                        waterLevelSeries.setStableTriggered(false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            LOGGER.debug("Water level decrease not stopped yet.");
+        }
+    }
+
+    private void checkDecreaseToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+        LOGGER.debug("checkDecreaseToStable () :: isDecreaseToStableTriggered() "
+                + waterLevelSeries.isDecreaseToStableTriggered());
+        if (!waterLevelSeries.isStableToDecreaseTriggered()) {
+            int filteredDataSize = filteredData.size();
+            LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+                    + MINIMUM_PACKETES_TO_CONFIRM);
+            if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
+                int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                int triggerCount = 0;
+                int waterLevel = 0;
+
+                for (int i = 1; i < filteredDataSize; i++) {
+                    waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                    LOGGER.debug("WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
+                    if (triggerCount <= 3 && waterLevel < defaultWaterLevel) {
+                        defaultWaterLevel = waterLevel;
+                        ++triggerCount;
+                    }
+                    if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                        LOGGER.debug("3 packetes were decreased");
+                        break;
+                    }
+                }
+
+                if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
+                    defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                    triggerCount = 0;
+                    waterLevel = 0;
+                    int decreasingWaterLevel = 0;
+                    for (int i = 1; i < filteredDataSize; i++) {
+                        waterLevel = filteredData.get(i).getWaterLevelPercentage();
+                        if (triggerCount <= 3 && waterLevel < defaultWaterLevel) {
+                            decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
+                            defaultWaterLevel = waterLevel;
+                            ++triggerCount;
+                        }
+
+                        if (triggerCount > 3 && waterLevel == defaultWaterLevel) {
+                            ++triggerCount;
+                        }
+
+                    }
+
+                    if (triggerCount >= MINIMUM_PACKETES_TO_CONFIRM) {
+                        LOGGER.debug("water level decreased from " + decreasingWaterLevel);
+                        String pattern = waterLevelApi.isValidAction("Level_Decrease_to_Stable");
+                        if(null != pattern) {
+                            if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                waterLevelSeries.setStableToDecreaseTriggered(false);
+                                waterLevelSeries.setDecreaseToStableTriggered(true);
+                                waterLevelSeries.setStableTriggered(false);
+                            }
+                        }
+
+                    }
+                }
+            }
+        } else {
+            LOGGER.debug("Water level decrease not stopped yet.");
+        }
+    }
+
+    private long getThresholdTime(long ts) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(ts);
+        cal.add(Calendar.MINUTE, THRESHOLD_TIME);
+        return cal.getTimeInMillis();
     }
 
     @Override
-    public void analyze(WaterLevelEvent waterLevelEvent) {
-        this.threadName="WaterLevelEngineThread";
-        addAndAnalyze(waterLevelEvent.getWaterLevelPercentage());
-    }
-
-    private void addAndAnalyze(int waterLevel) {
-        if(wlList.size()<10) {
-            wlList.add(waterLevel);
-        }else {
-            for(int i=0;i<10;i++ ) {
-                if(i < 9) {
-                    wlList.set(i, wlList.get(i+1));
-                }else {
-                    wlList.set(i, waterLevel);
-                }
-            }
-        }
-        triggerOutput();
-    }
-
-    public void triggerOutput() {
-        int size = wlList.size();
-        if(size > THRESHOLD) {
-            int startIndex = (size-THRESHOLD);
-            int prevWtrLvl = wlList.get(startIndex-1);
-            int []pts = {prevWtrLvl, 0};
-            for(int i=startIndex;  i< size; i++) {
-                System.out.println("i = "+i+" value = "+wlList.get(i)+" prevWaterLevel = "+pts[0]);
-                pts = analyzeOutput(wlList.get(i), pts);
-            }
-        }
-    }
-
-    private int[] analyzeOutput(int waterLevel, int[] pts) {
-        switch(ruleType) {
-            case 0:
-                return stableToIncrease(waterLevel, pts);
-            case 1:
-                return increaseToStable(waterLevel, pts);
-            default:
-                return pts;
-        }
-    }
-
-    private int[] stableToIncrease(int waterLevel, int[] pts) {
-        int prevWtrLvl = pts[0];
-        int triggerCount = pts[1];
-        if(waterLevel > prevWtrLvl) {
-            prevWtrLvl = waterLevel;
-            triggerCount++;
-            if(THRESHOLD == triggerCount) {
-                System.out.println("Trigger motor || stableToIncrease");
-                triggerCount = 0;
-                this.ruleType = 1;
-            }
-        }else {
-            triggerCount++;
-            if(THRESHOLD == triggerCount) {
-                triggerCount = 0;
-                System.out.println("stable to stable");
-            }
-        }
-        pts[0] = prevWtrLvl;
-        pts[1] = triggerCount;
-        return pts;
-    }
-
-    private int[] increaseToStable(int waterLevel, int[] pts) {
-        int prevWtrLvl = pts[0];
-        int triggerCount = pts[1];
-        if(waterLevel == prevWtrLvl) {
-            triggerCount++;
-            if(THRESHOLD == triggerCount) {
-                System.out.println("Increase to stopped");
-                triggerCount = 0;
-                this.ruleType = 0;
-            }
-        }
-        pts[0] = prevWtrLvl;
-        pts[1] = triggerCount;
-        return pts;
-    }
-
-    private int[] stableToStable(int waterLevel, int[] pts) {
-        int prevWtrLvl = pts[0];
-        int triggerCount = pts[1];
-        if(this.ruleType == 3 && waterLevel == prevWtrLvl) {
-            triggerCount++;
-            if(THRESHOLD == triggerCount) {
-                System.out.println("stable to stable");
-                triggerCount = 0;
-                this.ruleType = 3;
-            }
-        }
-        pts[0] = prevWtrLvl;
-        pts[1] = triggerCount;
-        return pts;
+    protected void analyze(WaterLevelSeries object, long ts) {
+        analyzeWaterLevelSeries(object, ts);
     }
 }
-
 

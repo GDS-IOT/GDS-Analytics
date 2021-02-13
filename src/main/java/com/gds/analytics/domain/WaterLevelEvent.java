@@ -54,6 +54,7 @@ public class WaterLevelEvent extends GDSBase {
         sb.append(", packetType=").append(packetType);
         sb.append(", messageType=").append(messageType);
         sb.append(", dateTime='").append(dateTime).append('\'');
+        sb.append(", ts=").append(ts);
         sb.append('}');
         return sb.toString();
     }

@@ -85,6 +85,7 @@ public abstract class Converter<T> {
         gdsBase.setPacketType((int) data[packetTypeIdx]);
         gdsBase.setMessageType((int) data[messageTypeIdx]);
         gdsBase.setDateTime(gdsData.getTs());
+        gdsBase.setTs(Long.valueOf(gdsData.getTs()));
     }
 
     public abstract T convert(GDSData gdsData);
