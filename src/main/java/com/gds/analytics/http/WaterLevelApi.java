@@ -72,7 +72,7 @@ public class WaterLevelApi {
             try {
                 respJson = (JSONObject) parser.parse(val.getBody());
                 LOGGER.debug("Successfully parsing completed");
-                if (HttpStatus.OK.value() == ((Long)respJson.get(STATUS_ID)).intValue()) {
+                if (HttpStatus.OK.value() == ((Long) respJson.get(STATUS_ID)).intValue()) {
                     LOGGER.debug("Water Level Rule success");
                     return (String) respJson.get(WATER_LEVEL_PATTERN);
                 } else {
@@ -102,18 +102,15 @@ public class WaterLevelApi {
         }
         if (null != response) {
             JSONObject resp = null;
-            try {
-                LOGGER.debug("water level trigger api response "+response.getBody());
-                resp = (JSONObject) parser.parse(response.getBody());
-            } catch (ParseException pe) {
-                LOGGER.error("isTriggered() Error while parsing json ", pe);
+            LOGGER.debug("water level trigger api response " + response.getBody());
+            LOGGER.debug("Successfully water level event sent");
+            if ("success".equalsIgnoreCase(response.getBody().toLowerCase())) {
+                return true;
+            } else {
+                LOGGER.debug("WaterLevel trigger failed");
                 return false;
             }
-            if (HttpStatus.OK.value() == ((Long)resp.get(STATUS_ID)).intValue()) {
-                LOGGER.debug("Successfully water level event sent");
-                return true;
-            }
-        }else{
+        } else {
             LOGGER.debug("Water level API returned null");
         }
         return false;
