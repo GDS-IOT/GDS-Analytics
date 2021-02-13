@@ -330,7 +330,6 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
 
     @Override
     protected void analyze(WaterLevelSeries object, long ts) {
-        super.threadName = "WaterLevelEngine-Thread";
         analyzeWaterLevelSeries(object, ts);
     }
 }
