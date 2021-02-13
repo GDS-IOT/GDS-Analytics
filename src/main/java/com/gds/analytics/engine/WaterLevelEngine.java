@@ -12,14 +12,12 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- *
  * @author Sujith Ramanathan
- *
+ * <p>
  * Version 1
- *
  */
 @Component
-public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
+public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
 
     private static final Logger LOGGER = Logger.getLogger(WaterLevelEngine.class);
 
@@ -104,14 +102,14 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                                 LOGGER.debug(
                                         "Water level increased ::: water level increased from " + beginningWaterLevel);
                                 String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
-                                if(null != pattern) {
-                                    if(waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                if (null != pattern) {
+                                    if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
                                         waterLevelSeries.setStableToIncrease(true);
                                         waterLevelSeries.setStableTriggered(false);
-                                    }else{
+                                    } else {
                                         LOGGER.debug("Water level not triggered");
                                     }
-                                }else{
+                                } else {
                                     LOGGER.debug("Water level rule returned null");
                                 }
                             }
@@ -170,12 +168,13 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                             LOGGER.debug("Inc To Stable ");
                             LOGGER.debug("Break " + beginningWaterLevel);
                             String pattern = waterLevelApi.isValidAction("Level_Increase_to_Stable");
-                            if(null != pattern) {
-                                if(waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                            if (null != pattern) {
+                                if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
                                     waterLevelSeries.setStableToIncrease(false);
                                     waterLevelSeries.setStableTriggered(false);
+                                    waterLevelSeries.setIncreaseToStableTriggered(true);
                                 }
-                            }else{
+                            } else {
                                 LOGGER.debug("Increase to Stable pattern type is null");
                             }
                             break;
@@ -243,13 +242,13 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                             if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
                                 LOGGER.debug("water level decreased from " + decreasingWaterLevel);
                                 String pattern = waterLevelApi.isValidAction("Level_Stable_to_Decrease");
-                                if(null != pattern) {
+                                if (null != pattern) {
                                     if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
                                         waterLevelSeries.setStableToDecreaseTriggered(true);
                                         waterLevelSeries.setDecreaseToStableTriggered(false);
                                         waterLevelSeries.setStableTriggered(false);
                                     }
-                                }else{
+                                } else {
                                     LOGGER.debug("Stable to decrease pattern type is null");
                                 }
                             }
@@ -309,13 +308,13 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                     if (triggerCount >= MINIMUM_PACKETES_TO_CONFIRM) {
                         LOGGER.debug("water level decreased from " + decreasingWaterLevel);
                         String pattern = waterLevelApi.isValidAction("Level_Decrease_to_Stable");
-                        if(null != pattern) {
+                        if (null != pattern) {
                             if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
                                 waterLevelSeries.setStableToDecreaseTriggered(false);
                                 waterLevelSeries.setDecreaseToStableTriggered(true);
                                 waterLevelSeries.setStableTriggered(false);
                             }
-                        }else{
+                        } else {
                             LOGGER.debug("Dec To stable pattern is null");
                         }
 
