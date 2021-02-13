@@ -3,12 +3,19 @@ package com.gds.analytics.converter;
 import com.gds.analytics.constants.Constants;
 import com.gds.analytics.domain.GDSBase;
 import com.gds.domain.GDSData;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Sujith Ramanathan
  */
 public abstract class Converter<T> {
+
+    private static final Logger LOGGER = Logger.getLogger(Converter.class);
 
     @Value("${" + Constants.SYSTEM_ID_DELIMITER + "}")
     protected String systemIdDelimiter;
@@ -85,7 +92,17 @@ public abstract class Converter<T> {
         gdsBase.setPacketType((int) data[packetTypeIdx]);
         gdsBase.setMessageType((int) data[messageTypeIdx]);
         gdsBase.setDateTime(gdsData.getTs());
-        gdsBase.setTs(Long.valueOf(gdsData.getTs()));
+        gdsBase.setTs(convertDateToTs(gdsData.getTs()));
+    }
+
+    private long convertDateToTs(String date) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return df.parse(date).getTime();
+        } catch (ParseException pe) {
+            LOGGER.error("Error occurred while parsing timestamp ", pe);
+        }
+        return 0;
     }
 
     public abstract T convert(GDSData gdsData);
