@@ -103,9 +103,10 @@ public class WaterLevelApi {
         if (null != response) {
             JSONObject resp = null;
             try {
+                LOGGER.debug("water level trigger api response "+response.getBody());
                 resp = (JSONObject) parser.parse(response.getBody());
             } catch (ParseException pe) {
-                LOGGER.error("Error while parsing json ", pe);
+                LOGGER.error("isTriggered() Error while parsing json ", pe);
                 return false;
             }
             if (HttpStatus.OK.value() == ((Long)resp.get(STATUS_ID)).intValue()) {
