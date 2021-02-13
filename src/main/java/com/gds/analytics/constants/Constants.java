@@ -5,8 +5,12 @@ package com.gds.analytics.constants;
  */
 public class Constants {
 
-    // HEART-BEAT-CONSTANTS
+    // Constants
+    public static final String AUTHORIZATION = "Authorization";
 
+    public static final String USER_KEY = "UserKey";
+
+    // HEART-BEAT-CONSTANTS
     public static final String HB_VALUE_SKIP = "hb.value.skip";
 
     public static final String SYSTEM_ID_START = "system.id.start";
@@ -65,5 +69,19 @@ public class Constants {
     public static final String HEART_BEAT_EVENT = "heart.beat.event";
 
     public static final String WATER_LEVEL_EVENT_ID = "water.level.event.id";
+
+
+    // API Events
+    public static final String API_WATER_LEVEL_EVENT = "event.api.water.level.id";
+
+
+    // HTTP URL
+    public static final String GDS_RULE_URL = "gds.rule.url";
+
+    public static final String GDS_WATER_LEVEL_TRIGGER_URL = "gds.water.level.trigger.url";
+
+    public static final String GDS_BEARER_TOKEN = "gds.bearer.token";
+
+    public static final String GDS_USER_KEY = "gds.user.key";
 
 }
