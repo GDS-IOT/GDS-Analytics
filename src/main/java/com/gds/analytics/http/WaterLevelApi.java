@@ -134,7 +134,7 @@ public class WaterLevelApi {
         payload.put("RFDeviceId", waterLevelEvent.getSystemIdAsInt());
         payload.put("MCUDeviceId", waterLevelEvent.getDeviceIdAsInt());
         payload.put("eventId", eventId);
-        payload.put("waterLevelPattern", waterLevelEvent);
+        payload.put("waterLevelPattern", waterLevelPattern);
         for (int i = 0; i < waterLevelSeries.getWaterLevelSeries().size(); i++) {
             waterLevelEvent = waterLevelSeries.getWaterLevelSeries().get(i);
             waterLevel = new JSONObject();
