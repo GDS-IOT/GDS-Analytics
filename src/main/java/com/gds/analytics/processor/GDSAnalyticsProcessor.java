@@ -72,7 +72,6 @@ public class GDSAnalyticsProcessor {
                 LOGGER.error("Not enough packets to process", aiobe);
             } catch (Exception e) {
                 LOGGER.error("Error occured while processing events. ", e);
-                consumer.close();
 //                flag = false;
 //                LOGGER.error("Shutting down kafka processor");
             }
