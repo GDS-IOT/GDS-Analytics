@@ -175,6 +175,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                                     waterLevelSeries.setStableToIncrease(false);
                                     waterLevelSeries.setStableTriggered(false);
                                 }
+                            }else{
+                                LOGGER.debug("Increase to Stable pattern type is null");
                             }
                             break;
                         }
@@ -247,6 +249,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                                         waterLevelSeries.setDecreaseToStableTriggered(false);
                                         waterLevelSeries.setStableTriggered(false);
                                     }
+                                }else{
+                                    LOGGER.debug("Stable to decrease pattern type is null");
                                 }
                             }
                         }
@@ -311,6 +315,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries>{
                                 waterLevelSeries.setDecreaseToStableTriggered(true);
                                 waterLevelSeries.setStableTriggered(false);
                             }
+                        }else{
+                            LOGGER.debug("Dec To stable pattern is null");
                         }
 
                     }

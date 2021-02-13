@@ -67,19 +67,21 @@ public class WaterLevelApi {
             return null;
         }
         if (null != val) {
-            LOGGER.debug("Rsponse received :: " + val.getBody());
+            LOGGER.debug("Pattern Response received :: " + val.getBody());
             JSONObject respJson = null;
             try {
                 respJson = (JSONObject) parser.parse(val.getBody());
+                LOGGER.debug("Successfully parsing completed");
+                LOGGER.debug("Checking instance "+(respJson.get(STATUS_ID) instanceof Integer));
+                if (HttpStatus.OK.value() == (int)respJson.get(STATUS_ID)) {
+                    LOGGER.debug("Water Level Rule success");
+                    return (String) respJson.get(WATER_LEVEL_PATTERN);
+                } else {
+                    LOGGER.debug("Water Level Pattern API Failed");
+                }
             } catch (ParseException e) {
                 LOGGER.error("Error occurred while parsing rule json Api ", e);
                 return null;
-            }
-            if (HttpStatus.OK.value() == (int)respJson.get(STATUS_ID)) {
-                LOGGER.debug("Water Level Rule success");
-                return (String) respJson.get(WATER_LEVEL_PATTERN);
-            } else {
-                LOGGER.debug("Water Level Pattern API Failed");
             }
         } else {
             LOGGER.debug("Water Level Pattern API returned null");
