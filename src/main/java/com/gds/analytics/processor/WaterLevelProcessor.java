@@ -54,6 +54,7 @@ public class WaterLevelProcessor implements Processor {
             wls = new WaterLevelSeries();
             wls.add(waterLevelEvent);
         }
+        waterMapper.put(waterLevelEvent.getSystemIdAsInt(), wls);
         waterLevelEngine.runBackground(wls, ts);
     }
 }
