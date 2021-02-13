@@ -13,7 +13,7 @@ public abstract class BackgroundEngine<T> {
             public void run() {
                 analyze(event, ts);
             }
-        }, threadName);
+        }, threadName).start();
     }
 
     protected abstract void analyze(T object, long ts);
