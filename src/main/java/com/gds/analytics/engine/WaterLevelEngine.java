@@ -94,10 +94,14 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     int beginningWaterLevel = 0;
                     for (int i = 1; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
-                        if (waterLevel > defaultWaterLevel) {
-                            beginningWaterLevel = beginningWaterLevel == 0 ? waterLevel : beginningWaterLevel;
-                            defaultWaterLevel = waterLevel;
+
+                        if (triggerCount <= 3 && defaultWaterLevel == waterLevel) {
                             ++triggerCount;
+                        }
+
+                        if (triggerCount >= 3 && waterLevel > defaultWaterLevel) {
+                            ++triggerCount;
+                            defaultWaterLevel = waterLevel;
                             if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
                                 LOGGER.debug(
                                         "Water level increased ::: water level increased from " + beginningWaterLevel);
@@ -114,6 +118,28 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                                 }
                             }
                         }
+
+
+//                        if (waterLevel > defaultWaterLevel) {
+//                            beginningWaterLevel = beginningWaterLevel == 0 ? waterLevel : beginningWaterLevel;
+//                            defaultWaterLevel = waterLevel;
+//                            ++triggerCount;
+//                            if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+//                                LOGGER.debug(
+//                                        "Water level increased ::: water level increased from " + beginningWaterLevel);
+//                                String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
+//                                if (null != pattern) {
+//                                    if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+//                                        waterLevelSeries.setStableToIncrease(true);
+//                                        waterLevelSeries.setStableTriggered(false);
+//                                    } else {
+//                                        LOGGER.debug("Water level not triggered");
+//                                    }
+//                                } else {
+//                                    LOGGER.debug("Water level rule returned null");
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
@@ -317,7 +343,6 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         } else {
                             LOGGER.debug("Dec To stable pattern is null");
                         }
-
                     }
                 }
             }
