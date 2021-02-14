@@ -221,7 +221,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         LOGGER.debug("checkStableToStable () ");
         int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage(),
                 filteredDataSize = filteredData.size(), triggerCount = 0;
-        for (int i = 1; i < filteredDataSize; i++) {
+        for (int i = 0; i < filteredDataSize; i++) {
             if (defaultWaterLevel == filteredData.get(i).getWaterLevelPercentage()) {
                 ++triggerCount;
             }
