@@ -96,7 +96,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         LOGGER.debug("CheckIncrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
                         if (triggerCount <= 3 && defaultWaterLevel == waterLevel) {
-                            LOGGER.debug("Rechecking-1 " + triggerCount + " waterLevel " + waterLevel + " defaultWaterLevel "+defaultWaterLevel);
+                            LOGGER.debug("Rechecking-1 " + triggerCount + " waterLevel " + waterLevel + " defaultWaterLevel " + defaultWaterLevel);
                             ++triggerCount;
                         }
 
@@ -266,24 +266,47 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     int decreasingWaterLevel = 0;
                     for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
-                        if (waterLevel < defaultWaterLevel) {
-                            decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
-                            defaultWaterLevel = waterLevel;
+
+                        if (triggerCount <= TRIGGER_THRESHOLD_SIZE && defaultWaterLevel == waterLevel) {
                             ++triggerCount;
-                            if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
-                                LOGGER.debug("water level decreased from " + decreasingWaterLevel);
-                                String pattern = waterLevelApi.isValidAction("Level_Stable_to_Decrease");
-                                if (null != pattern) {
-                                    if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
-                                        waterLevelSeries.setStableToDecreaseTriggered(true);
-                                        waterLevelSeries.setDecreaseToStableTriggered(false);
-                                        waterLevelSeries.setStableTriggered(false);
-                                    }
-                                } else {
-                                    LOGGER.debug("Stable to decrease pattern type is null");
+                        }
+
+                        if (triggerCount >= TRIGGER_THRESHOLD_SIZE && waterLevel < defaultWaterLevel) {
+                            ++triggerCount;
+                            defaultWaterLevel = waterLevel;
+                        }
+                        if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+                            LOGGER.debug("water level decreased from " + decreasingWaterLevel);
+                            String pattern = waterLevelApi.isValidAction("Level_Stable_to_Decrease");
+                            if (null != pattern) {
+                                if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                    waterLevelSeries.setStableToDecreaseTriggered(true);
+                                    waterLevelSeries.setDecreaseToStableTriggered(false);
+                                    waterLevelSeries.setStableTriggered(false);
                                 }
+                            } else {
+                                LOGGER.debug("Stable to decrease pattern type is null");
                             }
                         }
+
+//                        if (waterLevel < defaultWaterLevel) {
+//                            decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
+//                            defaultWaterLevel = waterLevel;
+//                            ++triggerCount;
+//                            if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+//                                LOGGER.debug("water level decreased from " + decreasingWaterLevel);
+//                                String pattern = waterLevelApi.isValidAction("Level_Stable_to_Decrease");
+//                                if (null != pattern) {
+//                                    if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+//                                        waterLevelSeries.setStableToDecreaseTriggered(true);
+//                                        waterLevelSeries.setDecreaseToStableTriggered(false);
+//                                        waterLevelSeries.setStableTriggered(false);
+//                                    }
+//                                } else {
+//                                    LOGGER.debug("Stable to decrease pattern type is null");
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
@@ -322,15 +345,15 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     triggerCount = 0;
                     waterLevel = 0;
                     int decreasingWaterLevel = 0;
-                    for (int i = 1; i < filteredDataSize; i++) {
+                    for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
-                        if (triggerCount <= 3 && waterLevel < defaultWaterLevel) {
+                        if (triggerCount <= TRIGGER_THRESHOLD_SIZE && waterLevel < defaultWaterLevel) {
                             decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
                             defaultWaterLevel = waterLevel;
                             ++triggerCount;
                         }
 
-                        if (triggerCount > 3 && waterLevel == defaultWaterLevel) {
+                        if (triggerCount >= TRIGGER_THRESHOLD_SIZE && waterLevel == defaultWaterLevel) {
                             ++triggerCount;
                         }
 
