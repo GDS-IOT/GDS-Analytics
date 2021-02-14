@@ -305,7 +305,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
     }
 
     private void checkDecreaseToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
-        LOGGER.debug("checkDecreaseToStable () :: isDecreaseToStableTriggered() "
+        LOGGER.debug("new checkDecreaseToStable() :: isDecreaseToStableTriggered() "
                 + waterLevelSeries.isDecreaseToStableTriggered());
         if (!waterLevelSeries.isDecreaseToStableTriggered()) {
             int filteredDataSize = filteredData.size();
