@@ -173,7 +173,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         ++triggerCount;
                     }
                     if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
-                        LOGGER.debug("3 packetes were increased");
+                        LOGGER.debug("checkincreaseToStable() :: 3 packetes were increased");
                         break;
                     }
                 }
@@ -184,6 +184,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     waterLevel = 0;
                     int beginningWaterLevel = 0;
                     for (int i = 0; i < filteredDataSize; i++) {
+                        LOGGER.debug("CheckStblToIncrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         if (waterLevel > defaultWaterLevel && triggerCount <= 3) {
                             beginningWaterLevel = defaultWaterLevel;
@@ -191,7 +192,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                             defaultWaterLevel = waterLevel;
                         }
 
-                        if (triggerCount > 3 && waterLevel == defaultWaterLevel) {
+                        if (triggerCount >= 3 && waterLevel == defaultWaterLevel) {
                             ++triggerCount;
                         }
                         if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
