@@ -75,7 +75,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
 
                 for (int i = 1; i < filteredDataSize; i++) {
                     waterLevel = filteredData.get(i).getWaterLevelPercentage();
-                    LOGGER.debug("WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
+                    LOGGER.debug("S-To-I WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
 
                     if (waterLevel > defaultWaterLevel) {
                         defaultWaterLevel = waterLevel;
@@ -94,7 +94,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     int beginningWaterLevel = 0;
                     for (int i = 1; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
-
+                        LOGGER.debug("filteredDataSize "+filteredDataSize+" waterLevel "+waterLevel+" defaultWaterLvl "+defaultWaterLevel );
                         if (triggerCount <= 3 && defaultWaterLevel == waterLevel) {
                             LOGGER.debug("Rechecking "+triggerCount+ " waterLevel "+waterLevel );
                             ++triggerCount;
