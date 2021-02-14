@@ -63,7 +63,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
     }
 
     private void checkStableToIncrease(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
-        LOGGER.debug("CheckIncrease () :: isIncreaseTriggered() " + waterLevelSeries.isStableToIncrease());
+        LOGGER.debug("checkStableToIncrease () :: isIncreaseTriggered() " + waterLevelSeries.isStableToIncrease());
         if (!waterLevelSeries.isStableToIncrease()) {
             int filteredDataSize = filteredData.size();
             LOGGER.debug("CheckIncrease() :: filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
@@ -307,7 +307,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
     private void checkDecreaseToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
         LOGGER.debug("checkDecreaseToStable () :: isDecreaseToStableTriggered() "
                 + waterLevelSeries.isDecreaseToStableTriggered());
-        if (!waterLevelSeries.isStableToDecreaseTriggered()) {
+        if (!waterLevelSeries.isDecreaseToStableTriggered()) {
             int filteredDataSize = filteredData.size();
             LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
                     + MINIMUM_PACKETES_TO_CONFIRM);
