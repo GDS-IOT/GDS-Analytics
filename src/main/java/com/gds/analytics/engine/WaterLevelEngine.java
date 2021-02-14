@@ -54,7 +54,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
 
     private void analyze(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
         checkStableToIncrease(filteredData, waterLevelSeries);
-        checkincreaseToStable(filteredData, waterLevelSeries);
+        checkIncreaseToStable(filteredData, waterLevelSeries);
 
         checkStableToStable(filteredData, waterLevelSeries);
 
@@ -111,8 +111,10 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                             String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
                             if (null != pattern) {
                                 if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
-                                    waterLevelSeries.setStableToIncrease(true);
                                     waterLevelSeries.setStableTriggered(false);
+                                    waterLevelSeries.setIncreaseToStableTriggered(false);
+
+                                    waterLevelSeries.setStableToIncrease(true);
                                 } else {
                                     LOGGER.debug("Water level not triggered");
                                 }
@@ -150,7 +152,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         }
     }
 
-    private void checkincreaseToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
+    private void checkIncreaseToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
         LOGGER.debug("checkincreaseToStable () :: isIncreaseToStableTriggered() "
                 + waterLevelSeries.isIncreaseToStableTriggered());
         if (!waterLevelSeries.isIncreaseToStableTriggered()) {
@@ -217,15 +219,15 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
 
     private void checkStableToStable(List<WaterLevelEvent> filteredData, WaterLevelSeries waterLevelSeries) {
         LOGGER.debug("checkStableToStable () ");
-        int defaultWaterLevel = 0, waterLevel = filteredData.get(0).getWaterLevelPercentage(),
+        int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage(),
                 filteredDataSize = filteredData.size(), triggerCount = 0;
-        for (int i = 1; i < filteredDataSize; i++) {
+        for (int i = 0; i < filteredDataSize; i++) {
             if (defaultWaterLevel == filteredData.get(i).getWaterLevelPercentage()) {
                 ++triggerCount;
             }
         }
         LOGGER.debug("Trigger Count :: " + triggerCount + ", filteredDataSize :: " + filteredDataSize);
-        if (filteredDataSize >= triggerCount) {
+        if (filteredDataSize == triggerCount) {
             waterLevelSeries.reset();
             LOGGER.debug("Stable to Stable triggered and restted");
         }
