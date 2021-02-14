@@ -313,7 +313,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     + MINIMUM_PACKETES_TO_CONFIRM);
             if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
                 int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
-                int triggerCount = 0;
+                int triggerCount = 1;
                 int waterLevel = 0;
 
                 for (int i = 1; i < filteredDataSize; i++) {
@@ -329,22 +329,14 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                 }
 
                 if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
-                    defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
-                    triggerCount = 0;
+                    defaultWaterLevel = filteredData.get(filteredDataSize - 1).getWaterLevelPercentage();
                     waterLevel = 0;
                     int decreasingWaterLevel = 0;
                     for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         LOGGER.debug("checkDecreaseToStable() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
 
-
-                        if (triggerCount <= TRIGGER_THRESHOLD_SIZE && waterLevel < defaultWaterLevel) {
-                            decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
-                            defaultWaterLevel = waterLevel;
-                            ++triggerCount;
-                        }
-
-                        if (triggerCount >= TRIGGER_THRESHOLD_SIZE && waterLevel == defaultWaterLevel) {
+                        if (defaultWaterLevel == waterLevel) {
                             ++triggerCount;
                         }
 
