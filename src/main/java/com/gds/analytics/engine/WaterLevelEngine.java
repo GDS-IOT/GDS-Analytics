@@ -254,7 +254,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         ++triggerCount;
                     }
                     if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
-                        LOGGER.debug("3 packetes were decreased");
+                        LOGGER.debug("checkStableToDecrease() :: 3 packetes were decreased");
                         break;
                     }
                 }
@@ -264,7 +264,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     triggerCount = 0;
                     waterLevel = 0;
                     int decreasingWaterLevel = 0;
-                    for (int i = 1; i < filteredDataSize; i++) {
+                    for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         if (waterLevel < defaultWaterLevel) {
                             decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
