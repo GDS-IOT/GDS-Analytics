@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Sujith Ramanathan
@@ -133,13 +134,17 @@ public class WaterLevelApi {
         payload.put("MCUDeviceId", waterLevelEvent.getDeviceIdAsInt());
         payload.put("eventId", eventId);
         payload.put("waterLevelPattern", waterLevelPattern);
-        for (int i = 0; i < waterLevelSeries.getWaterLevelSeries().size(); i++) {
-            waterLevelEvent = waterLevelSeries.getWaterLevelSeries().get(i);
+        List<WaterLevelEvent> dataList = waterLevelSeries.getWaterLevelSeries();
+        int dataListSize = dataList.size();
+        int index = 1;
+        for (int i = dataListSize - 6; i < dataListSize; i++) {
+            waterLevelEvent = dataList.get(i);
             waterLevel = new JSONObject();
             waterLevel.put("level", String.valueOf(waterLevelEvent.getWaterLevelPercentage()));
             waterLevel.put("timestamp", getDateString(waterLevelEvent.getTs()));
-            waterLevel.put("packet", String.valueOf(i + 1));
+            waterLevel.put("packet", String.valueOf(index));
             waterLevels.add(waterLevel);
+            index++;
         }
         payload.put("waterLevels", waterLevels);
         return payload.toJSONString();
