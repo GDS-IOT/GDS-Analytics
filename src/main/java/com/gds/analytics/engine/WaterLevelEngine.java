@@ -66,7 +66,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         LOGGER.debug("CheckIncrease () :: isIncreaseTriggered() " + waterLevelSeries.isStableToIncrease());
         if (!waterLevelSeries.isStableToIncrease()) {
             int filteredDataSize = filteredData.size();
-            LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+            LOGGER.debug("CheckIncrease() :: filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
                     + MINIMUM_PACKETES_TO_CONFIRM);
             if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
                 int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
@@ -92,18 +92,18 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     triggerCount = 0;
                     waterLevel = 0;
                     int beginningWaterLevel = 0;
-                    for (int i = 1; i < filteredDataSize; i++) {
+                    for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
-                        LOGGER.debug("filteredDataSize "+filteredDataSize+" waterLevel "+waterLevel+" defaultWaterLvl "+defaultWaterLevel );
+                        LOGGER.debug("CheckIncrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
                         if (triggerCount <= 3 && defaultWaterLevel == waterLevel) {
-                            LOGGER.debug("Rechecking "+triggerCount+ " waterLevel "+waterLevel );
+                            LOGGER.debug("Rechecking-1 " + triggerCount + " waterLevel " + waterLevel + " defaultWaterLevel "+defaultWaterLevel);
                             ++triggerCount;
                         }
 
                         if (triggerCount >= 3 && waterLevel > defaultWaterLevel) {
                             ++triggerCount;
                             defaultWaterLevel = waterLevel;
-                            LOGGER.debug("Rechecking "+triggerCount+ " waterLevel "+waterLevel+" defaultWaterLevel "+defaultWaterLevel );
+                            LOGGER.debug("Rechecking-2 " + triggerCount + " waterLevel " + waterLevel + " defaultWaterLevel " + defaultWaterLevel);
                         }
                         if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
                             LOGGER.debug(
@@ -236,7 +236,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                 "checkDecrease () :: isStableToDecreaseTriggered() " + waterLevelSeries.isStableToDecreaseTriggered());
         if (!waterLevelSeries.isStableToDecreaseTriggered()) {
             int filteredDataSize = filteredData.size();
-            LOGGER.debug("filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+            LOGGER.debug("checkDecrease () :: filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
                     + MINIMUM_PACKETES_TO_CONFIRM);
             if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
                 int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
