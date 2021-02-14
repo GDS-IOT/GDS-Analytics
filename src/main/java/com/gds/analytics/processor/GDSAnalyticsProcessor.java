@@ -9,6 +9,7 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -58,6 +59,7 @@ public class GDSAnalyticsProcessor {
         consumer.subscribe(Collections.singletonList(topicName));
         boolean flag = true;
         ConsumerRecords<String, GDSData> consumerRecords;
+        System.out.println(consumer.listTopics().toString());
         while (flag) {
             try {
                 consumerRecords = consumer.poll(Duration.ofSeconds(5));
