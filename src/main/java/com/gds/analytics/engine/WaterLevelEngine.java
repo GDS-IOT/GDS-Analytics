@@ -96,26 +96,28 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
 
                         if (triggerCount <= 3 && defaultWaterLevel == waterLevel) {
+                            LOGGER.debug("Rechecking "+triggerCount+ " waterLevel "+waterLevel );
                             ++triggerCount;
                         }
 
                         if (triggerCount >= 3 && waterLevel > defaultWaterLevel) {
                             ++triggerCount;
                             defaultWaterLevel = waterLevel;
-                            if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
-                                LOGGER.debug(
-                                        "Water level increased ::: water level increased from " + beginningWaterLevel);
-                                String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
-                                if (null != pattern) {
-                                    if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
-                                        waterLevelSeries.setStableToIncrease(true);
-                                        waterLevelSeries.setStableTriggered(false);
-                                    } else {
-                                        LOGGER.debug("Water level not triggered");
-                                    }
+                            LOGGER.debug("Rechecking "+triggerCount+ " waterLevel "+waterLevel+" defaultWaterLevel "+defaultWaterLevel );
+                        }
+                        if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
+                            LOGGER.debug(
+                                    "Water level increased ::: water level increased from " + beginningWaterLevel);
+                            String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
+                            if (null != pattern) {
+                                if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
+                                    waterLevelSeries.setStableToIncrease(true);
+                                    waterLevelSeries.setStableTriggered(false);
                                 } else {
-                                    LOGGER.debug("Water level rule returned null");
+                                    LOGGER.debug("Water level not triggered");
                                 }
+                            } else {
+                                LOGGER.debug("Water level rule returned null");
                             }
                         }
 
