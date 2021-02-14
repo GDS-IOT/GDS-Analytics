@@ -336,6 +336,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         LOGGER.debug("checkDecreaseToStable() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
+
+
                         if (triggerCount <= TRIGGER_THRESHOLD_SIZE && waterLevel < defaultWaterLevel) {
                             decreasingWaterLevel = decreasingWaterLevel == 0 ? waterLevel : decreasingWaterLevel;
                             defaultWaterLevel = waterLevel;
