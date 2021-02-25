@@ -348,8 +348,9 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         if (null != pattern) {
                             if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
                                 waterLevelSeries.setStableToDecreaseTriggered(false);
-                                waterLevelSeries.setDecreaseToStableTriggered(true);
                                 waterLevelSeries.setStableTriggered(false);
+
+                                waterLevelSeries.setDecreaseToStableTriggered(true);
                             }
                         } else {
                             LOGGER.debug("Dec To stable pattern is null");

@@ -16,7 +16,7 @@ public class WaterLevelSeries {
     private boolean decreaseToStableTriggered;
     private boolean stableTriggered;
 
-    private static final int DEFAULT_PACKET_SIZE = 10;
+    private static final int DEFAULT_PACKET_SIZE = 20;
     private static final int ROTATIONAL_PACKET_SIZE = DEFAULT_PACKET_SIZE - 1;
 
     public WaterLevelSeries() {
