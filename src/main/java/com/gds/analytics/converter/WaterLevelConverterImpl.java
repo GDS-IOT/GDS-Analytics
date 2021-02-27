@@ -27,7 +27,10 @@ public class WaterLevelConverterImpl extends Converter<WaterLevelEvent> {
         super.setBaseData(wl, gdsData);
         byte []data = gdsData.getGdsData();
         wl.setEventId((int)data[eventIdIdx]);
-        wl.setWaterLevelPercentage((int)data[waterLvlPercentageIdx]);
+        int waterLevel = ((int)data[waterLvlPercentageIdx] * 100) + (int)data[waterLvlPercentageIdx+1];
+//        wl.setWaterLevelPercentage((int)data[waterLvlPercentageIdx]);
+        wl.setWaterLevelPercentage(waterLevel);
         return wl;
+
     }
 }
