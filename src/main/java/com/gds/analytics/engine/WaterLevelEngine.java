@@ -89,7 +89,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
                     triggerCount = 0;
                     waterLevel = 0;
-                    int []stableAndValue = isStableAchieved(filteredData);
+                    int []stableAndValue = getStablePatternAndValue(filteredData);
                     if(1 == stableAndValue[0]) {
                         triggerCount = 3;
                         defaultWaterLevel = stableAndValue[1];
@@ -221,7 +221,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         LOGGER.debug("Trigger Count :: " + triggerCount + ", filteredDataSize :: " + filteredDataSize);
         if (filteredDataSize == triggerCount) {
             waterLevelSeries.reset();
-            LOGGER.debug("Stable to Stable triggered and restted");
+            LOGGER.debug("Stable to Stable triggered and resetted");
         }
     }
 
@@ -233,9 +233,14 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
             LOGGER.debug("checkDecrease () :: filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
                     + MINIMUM_PACKETES_TO_CONFIRM);
             if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
-                int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                int defaultWaterLevel = 0;
                 int triggerCount = 0;
                 int waterLevel = 0;
+
+                int[] stablePatternAndValue = getStablePatternAndValue(filteredData);
+                if (1 == stablePatternAndValue[0]) {
+                    defaultWaterLevel = stablePatternAndValue[1];
+                }
 
                 for (int i = 1; i < filteredDataSize; i++) {
                     waterLevel = filteredData.get(i).getWaterLevelPercentage();
@@ -251,16 +256,18 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                 }
 
                 if (triggerCount == TRIGGER_THRESHOLD_SIZE) {
-                    defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
+                    defaultWaterLevel = 0;
                     triggerCount = 0;
                     waterLevel = 0;
                     int decreasingWaterLevel = 0;
+                    stablePatternAndValue = getStablePatternAndValue(filteredData);
+                    if(1 == stablePatternAndValue[0]){
+                        triggerCount = 3;
+                        defaultWaterLevel = stablePatternAndValue[1];
+                    }
                     for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         LOGGER.debug("checkStableToDecrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
-                        if (triggerCount <= TRIGGER_THRESHOLD_SIZE && defaultWaterLevel == waterLevel) {
-                            ++triggerCount;
-                        }
 
                         if (triggerCount >= TRIGGER_THRESHOLD_SIZE && waterLevel < defaultWaterLevel) {
                             ++triggerCount;
@@ -365,7 +372,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         }
     }
 
-    private int[] isStableAchieved(List<WaterLevelEvent> filteredData){
+    private int[] getStablePatternAndValue(List<WaterLevelEvent> filteredData){
         Set<Integer> stablePattern = new HashSet<Integer>();
         int stableLevel = 0;
         for(WaterLevelEvent event : filteredData){
