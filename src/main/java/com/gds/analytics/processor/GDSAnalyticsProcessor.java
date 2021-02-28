@@ -55,7 +55,7 @@ public class GDSAnalyticsProcessor {
     }
 
     public void processMessage() {
-        LOGGER.debug("KafkaConsumer Listening for messages ");
+        LOGGER.debug("V1.0 KafkaConsumer Listening for messages ");
         consumer.subscribe(Collections.singletonList(topicName));
         boolean flag = true;
         ConsumerRecords<String, GDSData> consumerRecords;
