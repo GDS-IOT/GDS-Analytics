@@ -89,8 +89,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
                     triggerCount = 0;
                     waterLevel = 0;
-                    int []stableAndValue = getStablePatternAndValue(filteredData);
-                    if(1 == stableAndValue[0]) {
+                    int[] stableAndValue = getStablePatternAndValue(filteredData);
+                    if (1 == stableAndValue[0]) {
                         triggerCount = 3;
                         defaultWaterLevel = stableAndValue[1];
                     }
@@ -105,7 +105,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         }
                         if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
                             LOGGER.debug(
-                                    "Water level increased :::" );
+                                    "Water level increased :::");
                             String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
                             if (null != pattern) {
                                 if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
@@ -145,8 +145,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
 //                        }
                     }
                 }
-            }else{
-                LOGGER.debug("Insufficient packets "+filteredDataSize);
+            } else {
+                LOGGER.debug("Insufficient packets " + filteredDataSize);
             }
         } else {
             LOGGER.debug("Water level increase not stopped yet.");
@@ -187,7 +187,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                             ++triggerCount;
                         }
                         if (triggerCount >= MINIMUM_PACKETES_TO_CONFIRM) {
-                            LOGGER.debug("Inc To Stable "+beginningWaterLevel);
+                            LOGGER.debug("Inc To Stable " + beginningWaterLevel);
                             String pattern = waterLevelApi.isValidAction("Level_Increase_to_Stable");
                             if (null != pattern) {
                                 if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
@@ -237,11 +237,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                 int triggerCount = 0;
                 int waterLevel = 0;
 
-                int[] stablePatternAndValue = getStablePatternAndValue(filteredData);
-                if (1 == stablePatternAndValue[0]) {
-                    defaultWaterLevel = stablePatternAndValue[1];
-                }
-
+                defaultWaterLevel = getStableValue(filteredData, filteredDataSize);
                 for (int i = 1; i < filteredDataSize; i++) {
                     waterLevel = filteredData.get(i).getWaterLevelPercentage();
                     LOGGER.debug("WaterLevel :: " + waterLevel + ", DefaultWaterLevel :: " + defaultWaterLevel);
@@ -260,15 +256,19 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     triggerCount = 0;
                     waterLevel = 0;
                     int decreasingWaterLevel = 0;
-                    stablePatternAndValue = getStablePatternAndValue(filteredData);
-                    if(1 == stablePatternAndValue[0]){
-                        triggerCount = 3;
-                        defaultWaterLevel = stablePatternAndValue[1];
+                    int stableValue = getStableValue(filteredData, filteredDataSize);
+                    if (0 != stableValue) {
+                        defaultWaterLevel = stableValue;
                     }
                     for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
                         LOGGER.debug("checkStableToDecrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
 
+                        // Should start check decrease pattern from stable value. Hence duplicate will be avoided
+                        if(stableValue == waterLevel){
+                            triggerCount = 3;
+                            stableValue = -1;
+                        }
                         if (triggerCount >= TRIGGER_THRESHOLD_SIZE && waterLevel < defaultWaterLevel) {
                             ++triggerCount;
                             defaultWaterLevel = waterLevel;
@@ -372,15 +372,15 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         }
     }
 
-    private int[] getStablePatternAndValue(List<WaterLevelEvent> filteredData){
+    private int[] getStablePatternAndValue(List<WaterLevelEvent> filteredData) {
         Set<Integer> stablePattern = new HashSet<Integer>();
         int stableLevel = 0;
-        for(WaterLevelEvent event : filteredData){
-            if (!stablePattern.add(event.getWaterLevelPercentage())){
+        for (WaterLevelEvent event : filteredData) {
+            if (!stablePattern.add(event.getWaterLevelPercentage())) {
                 stableLevel = event.getWaterLevelPercentage();
             }
         }
-        int []stablePatternAndValue = new int[2];
+        int[] stablePatternAndValue = new int[2];
 
         // +1 to match stablePattern.size()
         stablePatternAndValue[0] = ((filteredData.size() - TRIGGER_THRESHOLD_SIZE)) + 1 == stablePattern.size() ? 1 : 0;
@@ -389,6 +389,27 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         LOGGER.debug("isStableAchieved() ".concat(String.valueOf(stablePatternAndValue[0])).concat(" stableLevel ").concat(String.valueOf(stableLevel)));
         return stablePatternAndValue;
     }
+
+    private int getStableValue(List<WaterLevelEvent> filteredData, int size) {
+        int count = 0;
+        int nextIndex = 0;
+        int value = 0;
+        for (int i = 0; i <= size - 1; i++) {
+            nextIndex = i + 1;
+            if (nextIndex < size && filteredData.get(i).getWaterLevelPercentage() == filteredData.get(nextIndex).getWaterLevelPercentage()) {
+                count++;
+                if (count == 2) {
+                    value = filteredData.get(i).getWaterLevelPercentage();
+                    break;
+                }
+            } else {
+                count = 0;
+            }
+        }
+        LOGGER.debug("getStableValue() :: stableValue = ".concat(String.valueOf(value)));
+        return value;
+    }
+
 
     private long getThresholdTime(long ts) {
         Calendar cal = Calendar.getInstance();
