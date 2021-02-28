@@ -115,6 +115,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                                     waterLevelSeries.setIncreaseToStableTriggered(false);
 
                                     waterLevelSeries.setStableToIncrease(true);
+                                    LOGGER.debug("Stable to Increase triggered ".concat(waterLevelSeries.toString()));
                                 } else {
                                     LOGGER.debug("Water level not triggered");
                                 }
@@ -193,6 +194,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                                     waterLevelSeries.setStableToIncrease(false);
                                     waterLevelSeries.setStableTriggered(false);
                                     waterLevelSeries.setIncreaseToStableTriggered(true);
+                                    LOGGER.debug("IncreaseToStable Triggered ".concat(waterLevelSeries.toString()));
                                 }
                             } else {
                                 LOGGER.debug("Increase to Stable pattern type is null");
