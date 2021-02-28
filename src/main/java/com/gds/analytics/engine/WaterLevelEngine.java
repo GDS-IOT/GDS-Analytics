@@ -7,9 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Sujith Ramanathan
@@ -66,7 +64,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         LOGGER.debug("checkStableToIncrease () :: isIncreaseTriggered() " + waterLevelSeries.isStableToIncrease());
         if (!waterLevelSeries.isStableToIncrease()) {
             int filteredDataSize = filteredData.size();
-            LOGGER.debug("CheckIncrease() :: filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
+            LOGGER.debug("checkStableToIncrease() :: filertedDataSize :: " + filteredDataSize + " , MINIMUM_PACKETES_TO_CONFIRM :: "
                     + MINIMUM_PACKETES_TO_CONFIRM);
             if (filteredDataSize >= MINIMUM_PACKETES_TO_CONFIRM) {
                 int defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
@@ -91,14 +89,14 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                     defaultWaterLevel = filteredData.get(0).getWaterLevelPercentage();
                     triggerCount = 0;
                     waterLevel = 0;
-                    int beginningWaterLevel = 0;
+                    int []stableAndValue = isStableAchieved(filteredData);
+                    if(1 == stableAndValue[0]) {
+                        triggerCount = 3;
+                        defaultWaterLevel = stableAndValue[1];
+                    }
                     for (int i = 0; i < filteredDataSize; i++) {
                         waterLevel = filteredData.get(i).getWaterLevelPercentage();
-                        LOGGER.debug("CheckIncrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
-                        if (triggerCount <= 3 && defaultWaterLevel == waterLevel) {
-                            LOGGER.debug("Rechecking-1 " + triggerCount + " waterLevel " + waterLevel + " defaultWaterLevel " + defaultWaterLevel);
-                            ++triggerCount;
-                        }
+                        LOGGER.debug("checkStableToIncrease() :: filteredDataSize " + filteredDataSize + " waterLevel " + waterLevel + " defaultWaterLvl " + defaultWaterLevel + " triggerCount " + triggerCount);
 
                         if (triggerCount >= 3 && waterLevel > defaultWaterLevel) {
                             ++triggerCount;
@@ -107,7 +105,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
                         }
                         if (triggerCount == MINIMUM_PACKETES_TO_CONFIRM) {
                             LOGGER.debug(
-                                    "Water level increased ::: water level increased from " + beginningWaterLevel);
+                                    "Water level increased :::" );
                             String pattern = waterLevelApi.isValidAction("Level_Stable_to_Increase");
                             if (null != pattern) {
                                 if (waterLevelApi.isTriggered(waterLevelSeries, pattern)) {
@@ -147,6 +145,8 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
 //                        }
                     }
                 }
+            }else{
+                LOGGER.debug("Insufficient packets "+filteredDataSize);
             }
         } else {
             LOGGER.debug("Water level increase not stopped yet.");
@@ -363,6 +363,24 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         } else {
             LOGGER.debug("Water level decrease not stopped yet.");
         }
+    }
+
+    private int[] isStableAchieved(List<WaterLevelEvent> filteredData){
+        Set<Integer> stablePattern = new HashSet<Integer>();
+        int stableLevel = 0;
+        for(WaterLevelEvent event : filteredData){
+            if (!stablePattern.add(event.getWaterLevelPercentage())){
+                stableLevel = event.getWaterLevelPercentage();
+            }
+        }
+        int []stablePatternAndValue = new int[2];
+
+        // +1 to match stablePattern.size()
+        stablePatternAndValue[0] = ((filteredData.size() - TRIGGER_THRESHOLD_SIZE)) + 1 == stablePattern.size() ? 1 : 0;
+        stablePatternAndValue[1] = stableLevel;
+
+        LOGGER.debug("isStableAchieved() ".concat(String.valueOf(stablePatternAndValue[0])).concat(" stableLevel ").concat(String.valueOf(stableLevel)));
+        return stablePatternAndValue;
     }
 
     private long getThresholdTime(long ts) {
