@@ -45,6 +45,7 @@ public class Constants {
 
 
     // Water Level
+    public static final String WATER_LVL_CM_IDX = "water.lvl.cm.idx";
     public static final String WATER_LVL_PERCENTAGE_IDX = "water.lvl.percentage.idx";
 
     // Kafka Consumer

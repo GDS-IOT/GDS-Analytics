@@ -18,6 +18,9 @@ public class WaterLevelConverterImpl extends Converter<WaterLevelEvent> {
     @Value("${" + Constants.EVENT_ID_IDX + "}")
     private int eventIdIdx;
 
+    @Value("${"+Constants.WATER_LVL_CM_IDX+"}")
+    private int waterLvlCmIdx;
+
     @Value("${"+Constants.WATER_LVL_PERCENTAGE_IDX+"}")
     private int waterLvlPercentageIdx;
 
@@ -27,9 +30,10 @@ public class WaterLevelConverterImpl extends Converter<WaterLevelEvent> {
         super.setBaseData(wl, gdsData);
         byte []data = gdsData.getGdsData();
         wl.setEventId((int)data[eventIdIdx]);
-        int waterLevel = ((int)data[waterLvlPercentageIdx] * 100) + (int)data[waterLvlPercentageIdx+1];
+        int waterLevelCm = ((int)data[waterLvlCmIdx] * 100) + (int)data[waterLvlCmIdx+1];
 //        wl.setWaterLevelPercentage((int)data[waterLvlPercentageIdx]);
-        wl.setWaterLevelPercentage(waterLevel);
+        wl.setWaterLevelPercentage(data[waterLvlPercentageIdx]);
+        wl.setWaterLevelCm(waterLevelCm);
         return wl;
 
     }

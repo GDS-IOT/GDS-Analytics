@@ -7,6 +7,7 @@ public class WaterLevelEvent extends GDSBase {
     private long txnId;
     private int eventId;
     private int waterLevelPercentage;
+    private int waterLevelCm;
     private List<Integer> waterLvlPercentageList;
 
     public long getTxnId() {
@@ -33,12 +34,21 @@ public class WaterLevelEvent extends GDSBase {
         this.waterLevelPercentage = waterLevelPercentage;
     }
 
+    public int getWaterLevelCm() {
+        return waterLevelCm;
+    }
+
+    public void setWaterLevelCm(int waterLevelCm) {
+        this.waterLevelCm = waterLevelCm;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("WaterLevelEvent{");
         sb.append("txnId=").append(txnId);
         sb.append(", eventId=").append(eventId);
         sb.append(", waterLevelPercentage=").append(waterLevelPercentage);
+        sb.append(", waterLevelCm=").append(waterLevelCm);
         sb.append(", waterLvlPercentageList=").append(waterLvlPercentageList);
         sb.append(", startByte=").append(startByte);
         sb.append(", systemId='").append(systemId).append('\'');
