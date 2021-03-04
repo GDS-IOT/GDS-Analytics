@@ -117,7 +117,6 @@ public class WaterLevelApi {
         return false;
     }
 
-
     private String createRuleBody(String action) {
         JSONObject json = new JSONObject();
         json.put("waterLevelPattern", action);
