@@ -142,6 +142,7 @@ public class WaterLevelApi {
             waterLevel.put("level", String.valueOf(waterLevelEvent.getWaterLevelPercentage()));
             waterLevel.put("timestamp", getDateString(waterLevelEvent.getTs()));
             waterLevel.put("packet", String.valueOf(index));
+            waterLevel.put("level_cm", String.valueOf(waterLevelEvent.getWaterLevelCm()));
             waterLevels.add(waterLevel);
             index++;
         }
