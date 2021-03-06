@@ -22,7 +22,7 @@ public class HeartBeatDaoImpl implements HeartBeatDao {
     public void insertHeartBeat(HeartBeat heartBeat) {
         Connection con = db.getConnection();
         String query = "insert into smt.hb_log(id_device, latency_counter, devicetype, rssi," +
-                "network_level, hopcounter, pac_type, message_type, timestamp) values (?,?,?,?,?,?,?,?,?)";
+                "network_level, hopcounter, pac_type, message_type, timestamp, rf_device_id) values (?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, heartBeat.getSystemId());
@@ -34,6 +34,7 @@ public class HeartBeatDaoImpl implements HeartBeatDao {
             pst.setInt(7, heartBeat.getPacketType());
             pst.setInt(8, heartBeat.getMessageType());
             pst.setTimestamp(9, Timestamp.valueOf(heartBeat.getDateTime()));
+            pst.setString(10, String.valueOf(heartBeat.getSystemIdAsInt()));
             LOGGER.debug("Query :: ".concat(pst.toString()));
             if (pst.executeUpdate() == 0) {
                 LOGGER.debug("Unable to insert row ");
