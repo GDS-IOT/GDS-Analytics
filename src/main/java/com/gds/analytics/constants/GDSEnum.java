@@ -9,6 +9,7 @@ import java.util.Map;
 public enum GDSEnum {
 
     WATER_LEVEL_STATUS(69, "SMAT_FETCH_WTRLVL_01", "Water_Level_Status"),
+    MOTOR_STATUS_HB_EVENT(74, "MOTOR_STATUS_HB", "MOTOR_STATUS_HB"),
     DEFAULT(0, "No_Event", "No_Action_Or_Not_a_valid_event");
 
     private int eventId;

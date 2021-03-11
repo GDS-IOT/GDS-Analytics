@@ -48,6 +48,10 @@ public class Constants {
     public static final String WATER_LVL_CM_IDX = "water.lvl.cm.idx";
     public static final String WATER_LVL_PERCENTAGE_IDX = "water.lvl.percentage.idx";
 
+    // Motor Status
+    public static final String MOTOR_HEART_BEAT_EVENT = "motor.status.hb.event";
+    public static final String MOTOR_STATUS_IDX = "motor.status.idx";
+
     // Kafka Consumer
     public static final String KAFKA_TOPIC = "kafka.topic";
 
