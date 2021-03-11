@@ -5,7 +5,6 @@ import java.util.List;
 public class WaterLevelEvent extends GDSBase {
 
     private long txnId;
-    private int eventId;
     private int waterLevelPercentage;
     private int waterLevelCm;
     private List<Integer> waterLvlPercentageList;
@@ -16,14 +15,6 @@ public class WaterLevelEvent extends GDSBase {
 
     public void setTxnId(long txnId) {
         this.txnId = txnId;
-    }
-
-    public int getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
     }
 
     public int getWaterLevelPercentage() {

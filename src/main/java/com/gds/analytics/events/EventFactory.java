@@ -21,6 +21,9 @@ public class EventFactory {
     @Value("${" + Constants.EVENT_ID_IDX + "}")
     private int eventIdIdx;
 
+    @Value("${"+ Constants.MOTOR_HEART_BEAT_EVENT +"}")
+    private int motorStatusHeartBeatEvent;
+
     @Value("${" + Constants.HEART_BEAT_EVENT + "}")
     private int heartBeatEvent;
 
@@ -31,6 +34,10 @@ public class EventFactory {
     @Autowired
     @Qualifier("waterLevelProcessor")
     private Processor waterLevelProcessor;
+
+    @Autowired
+    @Qualifier("MotorStatusProcessor")
+    private Processor motorStatusProcessor;
 
     public void processEvent(String key, GDSData data) {
         if (heartBeatEvent == data.getGdsData()[pacTypeIdx]) {
@@ -47,6 +54,9 @@ public class EventFactory {
             switch (event) {
                 case WATER_LEVEL_STATUS:
                     waterLevelProcessor.processData(data);
+                    break;
+                case MOTOR_STATUS_HB_EVENT:
+                    motorStatusProcessor.processData(data);
                     break;
                 case DEFAULT:
                     LOGGER.error("Not a valid event");

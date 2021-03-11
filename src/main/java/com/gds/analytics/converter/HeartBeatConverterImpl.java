@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 @Qualifier("HeartBeatConverterImpl")
 public class HeartBeatConverterImpl extends Converter<HeartBeat> {
 
-    @Autowired
-    private HeartBeatDao heartBeatDao;
-
     @Override
     public HeartBeat convert(GDSData gdsData) {
         HeartBeat hb = new HeartBeat();

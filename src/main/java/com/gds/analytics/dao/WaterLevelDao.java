@@ -1,6 +1,7 @@
 package com.gds.analytics.dao;
 
 import com.gds.analytics.domain.WaterLevelEvent;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Sujith Ramanathan

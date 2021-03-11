@@ -17,6 +17,15 @@ public abstract class GDSBase {
     protected int messageType;
     protected String dateTime;
     protected long ts;
+    protected int eventId;
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
 
     public String getDateTime() {
         return dateTime;
