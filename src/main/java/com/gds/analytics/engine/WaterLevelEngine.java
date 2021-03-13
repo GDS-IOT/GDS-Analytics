@@ -381,7 +381,7 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         int[] stablePatternAndValue = new int[2];
 
         // +1 to match stablePattern.size()
-        stablePatternAndValue[0] = ((filteredData.size() - TRIGGER_THRESHOLD_SIZE)) + 1 == stablePattern.size() ? 1 : 0;
+        stablePatternAndValue[0] = ((filteredData.size() - TRIGGER_THRESHOLD_SIZE) + 1) >= stablePattern.size() ? 1 : 0;
         stablePatternAndValue[1] = stableLevel;
 
         LOGGER.debug("isStableAchieved() ".concat(String.valueOf(stablePatternAndValue[0])).concat(" stableLevel ").concat(String.valueOf(stableLevel)));
@@ -421,39 +421,6 @@ public class WaterLevelEngine extends BackgroundEngine<WaterLevelSeries> {
         analyzeWaterLevelSeries(object, ts);
     }
 
-    private static int[] testStablePatternAndValue(List<Integer> filteredData) {
-        Set<Integer> stablePattern = new HashSet<Integer>();
-        int stableLevel = 0;
-        for (int event : filteredData) {
-            if (!stablePattern.add(event)) {
-                stableLevel = event;
-            }
-        }
-        int[] stablePatternAndValue = new int[2];
 
-        // +1 to match stablePattern.size()
-        stablePatternAndValue[0] = ((filteredData.size() - TRIGGER_THRESHOLD_SIZE) + 1) >= stablePattern.size() ? 1 : 0;
-        stablePatternAndValue[1] = stableLevel;
-
-        System.out.println("(filteredData.size() - TRIGGER_THRESHOLD_SIZE)) + 1 = "+((filteredData.size() - TRIGGER_THRESHOLD_SIZE) + 1) + " stablePattern.size() "+stablePattern.size());
-
-        System.out.println("isStableAchieved() ".concat(String.valueOf(stablePatternAndValue[0])).concat(" stableLevel ").concat(String.valueOf(stableLevel)));
-        return stablePatternAndValue;
-    }
-
-    public static void main(String[] args) {
-        List<Integer> iList = new ArrayList<>();
-        iList.add(15);
-        iList.add(15);
-        iList.add(15);
-        iList.add(16);
-        iList.add(16);
-        iList.add(16);
-        iList.add(17);
-        iList.add(18);
-        iList.add(19);
-        iList.add(20);
-        testStablePatternAndValue(iList);
-    }
 }
 
