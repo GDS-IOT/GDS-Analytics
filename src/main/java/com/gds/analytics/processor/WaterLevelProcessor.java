@@ -5,7 +5,6 @@ import com.gds.analytics.dao.WaterLevelDao;
 import com.gds.analytics.domain.WaterLevelEvent;
 import com.gds.analytics.domain.WaterLevelSeries;
 import com.gds.analytics.engine.BackgroundEngine;
-import com.gds.analytics.engine.WaterLevelEngine;
 import com.gds.analytics.utils.WaterLevelDataMapper;
 import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
