@@ -29,29 +29,28 @@ public class MotorStatusDaoImpl implements MotorStatusDao {
 
     private void insertQuery(MotorStatusEvent motorStatusEvent) {
         Connection con = db.getConnection();
-        String query = "insert into smt.hb_mcu_log(id_device, latency_counter, devicetype, rssi," +
+        String query = "insert into smt.hb_mcu_log(latency_counter, devicetype, rssi," +
                 "network_level, hopcounter, pac_type, message_type, timestamp, rfid_device_with_hypen, " +
                 "event_code, event_message_1, mcu_deviceid_with_hyphen, " +
                 "mcu_deviceid_without_hyphen, rfid_device_without_hypen, createddate) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1, motorStatusEvent.getSystemId());
-            pst.setString(2, motorStatusEvent.getLatencyCounter());
-            pst.setInt(3, motorStatusEvent.getDeviceType());
-            pst.setInt(4, motorStatusEvent.getOriginRSSI());
-            pst.setInt(5, motorStatusEvent.getOriginNetworkLevel());
-            pst.setInt(6, motorStatusEvent.getHopCounter());
-            pst.setInt(7, motorStatusEvent.getPacketType());
-            pst.setInt(8, motorStatusEvent.getMessageType());
-            pst.setTimestamp(9, Timestamp.valueOf(motorStatusEvent.getDateTime()));
-            pst.setString(10, motorStatusEvent.getSystemId());
-            pst.setInt(11, motorStatusEvent.getEventId());
-            pst.setString(12, String.valueOf(motorStatusEvent.getMotorStatus()));
-            pst.setString(13, motorStatusEvent.getDeviceId());
-            pst.setString(14, String.valueOf(motorStatusEvent.getDeviceIdAsInt()));
-            pst.setString(15, String.valueOf(motorStatusEvent.getSystemIdAsInt()));
-            pst.setTimestamp(16, Timestamp.valueOf(motorStatusEvent.getDateTime()));
+            pst.setString(1, motorStatusEvent.getLatencyCounter());
+            pst.setInt(2, motorStatusEvent.getDeviceType());
+            pst.setInt(3, motorStatusEvent.getOriginRSSI());
+            pst.setInt(4, motorStatusEvent.getOriginNetworkLevel());
+            pst.setInt(5, motorStatusEvent.getHopCounter());
+            pst.setInt(6, motorStatusEvent.getPacketType());
+            pst.setInt(7, motorStatusEvent.getMessageType());
+            pst.setTimestamp(8, Timestamp.valueOf(motorStatusEvent.getDateTime()));
+            pst.setString(9, motorStatusEvent.getSystemId());
+            pst.setInt(10, motorStatusEvent.getEventId());
+            pst.setString(11, String.valueOf(motorStatusEvent.getMotorStatus()));
+            pst.setString(12, motorStatusEvent.getDeviceId());
+            pst.setString(13, String.valueOf(motorStatusEvent.getDeviceIdAsInt()));
+            pst.setString(14, String.valueOf(motorStatusEvent.getSystemIdAsInt()));
+            pst.setTimestamp(15, Timestamp.valueOf(motorStatusEvent.getDateTime()));
 
             LOGGER.debug("Motor status Query :: ".concat(pst.toString()));
             if (pst.executeUpdate() == 0) {
