@@ -1,4 +1,4 @@
-package com.gds.analytics.events;
+package com.gds.analytics.factory;
 
 import com.gds.analytics.constants.GDSEnum;
 import com.gds.analytics.processor.Processor;
