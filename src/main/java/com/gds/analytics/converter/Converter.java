@@ -65,6 +65,9 @@ public abstract class Converter<T> {
     @Value("${" + Constants.MESSAGE_TYPE_IDX + "}")
     protected int messageTypeIdx;
 
+    @Value("${" + Constants.EVENT_ID_IDX + "}")
+    protected int eventIdIdx;
+
     public String getString(byte[] data, int startIndex, int endIndex, String delimiter) {
         String value = "";
         for (int i = startIndex; i <= endIndex; i++) {
