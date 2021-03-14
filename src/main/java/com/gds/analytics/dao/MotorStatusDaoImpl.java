@@ -32,8 +32,8 @@ public class MotorStatusDaoImpl implements MotorStatusDao {
         String query = "insert into smt.hb_mcu_log(latency_counter, devicetype, rssi," +
                 "network_level, hopcounter, pac_type, message_type, timestamp, rfid_device_with_hypen, " +
                 "event_code, event_message_1, mcu_deviceid_with_hyphen, " +
-                "mcu_deviceid_without_hyphen, rfid_device_without_hypen, createddate, event_code) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "mcu_deviceid_without_hyphen, rfid_device_without_hypen, createddate) " +
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, motorStatusEvent.getLatencyCounter());
@@ -51,7 +51,6 @@ public class MotorStatusDaoImpl implements MotorStatusDao {
             pst.setString(13, String.valueOf(motorStatusEvent.getDeviceIdAsInt()));
             pst.setString(14, String.valueOf(motorStatusEvent.getSystemIdAsInt()));
             pst.setTimestamp(15, Timestamp.valueOf(motorStatusEvent.getDateTime()));
-            pst.setInt(16, motorStatusEvent.getEventId());
 
             LOGGER.debug("Motor status Query :: ".concat(pst.toString()));
             if (pst.executeUpdate() == 0) {

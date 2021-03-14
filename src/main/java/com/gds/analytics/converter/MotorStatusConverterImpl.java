@@ -23,6 +23,7 @@ public class MotorStatusConverterImpl extends Converter<MotorStatusEvent> {
         super.setBaseData(motorEvent, gdsData);
         byte []data = gdsData.getGdsData();
         motorEvent.setMotorStatus(data[motorStatusDataIdx]);
+        motorEvent.setEventId(data[eventIdIdx]);
         return motorEvent;
     }
 }
