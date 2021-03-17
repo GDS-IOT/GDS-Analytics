@@ -1,10 +1,12 @@
 package com.gds.analytics;
 
 import com.gds.analytics.processor.GDSAnalyticsProcessor;
+import com.gds.analytics.processor.Processor;
 import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -42,6 +44,7 @@ public class GDSAnalytics {
     }
 
     public void test(){
+        System.out.println("Coming here");
         byte []data = new byte[22];
         data[0] = 18;
         data[1] = 1;
@@ -72,7 +75,7 @@ public class GDSAnalytics {
         data[17] = 0;
 
         // Event Id
-        data[18] = 69;
+        data[18] = 74;
 
         data[19] = 0;
 
@@ -82,10 +85,13 @@ public class GDSAnalytics {
         data[21] = 80;
 
         GDSData gdsData = new GDSData();
+//        yyyy-MM-dd HH:mm:ss
+        gdsData.setTs("2021-03-14 22:30:54");
         gdsData.setGdsData(data);
 
 
 //        process.processData(gdsData);
+//        motorStatusProcessor.processData(gdsData);
     }
 
     public static void main(String[] args) {

@@ -23,7 +23,7 @@ import java.util.List;
  * @author Sujith Ramanathan
  */
 @Service
-public class WaterLevelApi {
+public class WaterLevelApi extends ApiSpec{
 
     private static final Logger LOGGER = Logger.getLogger(WaterLevelApi.class);
 
@@ -43,12 +43,6 @@ public class WaterLevelApi {
 
     @Value("${" + Constants.GDS_WATER_LEVEL_TRIGGER_URL + "}")
     private String waterLevelTriggerUrl;
-
-    @Value("${" + Constants.GDS_BEARER_TOKEN + "}")
-    private String bearerToken;
-
-    @Value("${" + Constants.GDS_USER_KEY + "}")
-    private String userKeyVal;
 
     @Value("${" + Constants.API_WATER_LEVEL_EVENT + "}")
     private String waterLevelApiEventId;
@@ -152,13 +146,5 @@ public class WaterLevelApi {
 
     private String getDateString(long ts) {
         return df.format(new Date(ts));
-    }
-
-    private HttpHeaders getHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(Constants.AUTHORIZATION, bearerToken);
-        headers.add(Constants.USER_KEY, userKeyVal);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return headers;
     }
 }

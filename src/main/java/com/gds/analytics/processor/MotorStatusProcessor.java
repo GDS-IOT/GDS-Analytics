@@ -3,6 +3,7 @@ package com.gds.analytics.processor;
 import com.gds.analytics.converter.Converter;
 import com.gds.analytics.dao.MotorStatusDao;
 import com.gds.analytics.domain.MotorStatusEvent;
+import com.gds.analytics.http.MotorStatusApi;
 import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,24 @@ public class MotorStatusProcessor implements Processor {
     @Autowired
     private MotorStatusDao motorStatusDao;
 
+    @Autowired
+    private MotorStatusApi motorStatusApi;
+
     @Override
     public void processData(GDSData gdsData) {
         LOGGER.debug("Processing Motor Status Processor ");
         MotorStatusEvent motorStatusEvent = motorStatusEventConverter.convert(gdsData);
-        motorStatusDao.insertMotorHB(motorStatusEvent);
+        int eventId = motorStatusEvent.getEventId();
+        if (eventId < 74) {
+            LOGGER.debug("Motor HB LOG ".concat(String.valueOf(eventId)));
+            motorStatusDao.insertMotorHB(motorStatusEvent);
+        } else {
+            LOGGER.debug("Motor status to API ".concat(String.valueOf(eventId)));
+            sendMotorStatusToApi(motorStatusEvent);
+        }
+    }
+
+    private void sendMotorStatusToApi(MotorStatusEvent motorEvent) {
+        motorStatusApi.sendMotorStatusToApi(motorEvent);
     }
 }
