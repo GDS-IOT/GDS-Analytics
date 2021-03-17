@@ -56,6 +56,8 @@ public class EventFactory {
                     waterLevelProcessor.processData(data);
                     break;
                 case MOTOR_STATUS_HB_EVENT:
+                case MOTOR_STATUS_ON_OFF:
+                case MOTOR_STATUS_MANUAL_MODE:
                     motorStatusProcessor.processData(data);
                     break;
                 case DEFAULT:

@@ -89,4 +89,6 @@ public class Constants {
 
     public static final String GDS_USER_KEY = "gds.user.key";
 
+    public static final String MOTOR_STATUS_URL = "motor.status.url";
+
 }
