@@ -33,7 +33,7 @@ public class MotorStatusProcessor implements Processor {
         LOGGER.debug("Processing Motor Status Processor ");
         MotorStatusEvent motorStatusEvent = motorStatusEventConverter.convert(gdsData);
         int eventId = motorStatusEvent.getEventId();
-        if (eventId < 74) {
+        if (eventId <= 74) {
             LOGGER.debug("Motor HB LOG ".concat(String.valueOf(eventId)));
             motorStatusDao.insertMotorHB(motorStatusEvent);
         } else {
