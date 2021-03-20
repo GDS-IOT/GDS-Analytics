@@ -49,7 +49,7 @@ public class MotorStatusApi extends ApiSpec {
         payload.put("packet_type", String.valueOf(motorEvent.getPacketType()));
         payload.put("message_type", String.valueOf(motorEvent.getMessageType()));
 
-        JSONArray motorStatusArray = getDeviceActionSerialData(motorEvent, 17, 35);
+        JSONArray motorStatusArray = getDeviceActionSerialData(motorEvent, 17, motorEvent.getData().length);
 
 //        JSONObject motorStatus = new JSONObject();
 //        motorStatus.put("serialdata_location", "8");
