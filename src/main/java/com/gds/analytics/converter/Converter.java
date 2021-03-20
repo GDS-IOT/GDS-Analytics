@@ -96,6 +96,7 @@ public abstract class Converter<T> {
         gdsBase.setMessageType((int) data[messageTypeIdx]);
         gdsBase.setDateTime(gdsData.getTs());
         gdsBase.setTs(convertDateToTs(gdsData.getTs()));
+        gdsBase.setData(data);
     }
 
     private long convertDateToTs(String date) {

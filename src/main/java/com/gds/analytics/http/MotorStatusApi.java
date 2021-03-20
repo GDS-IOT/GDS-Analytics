@@ -21,6 +21,7 @@ public class MotorStatusApi extends ApiSpec {
 
     @Autowired
     private RestTemplate restTemplate;
+
     @Value("${" + Constants.MOTOR_STATUS_URL + "}")
     private String motorStatusUrl;
 
@@ -48,13 +49,13 @@ public class MotorStatusApi extends ApiSpec {
         payload.put("packet_type", String.valueOf(motorEvent.getPacketType()));
         payload.put("message_type", String.valueOf(motorEvent.getMessageType()));
 
-        JSONArray motorStatusArray = new JSONArray();
+        JSONArray motorStatusArray = getDeviceActionSerialData(motorEvent, 17, 35);
 
-        JSONObject motorStatus = new JSONObject();
-        motorStatus.put("serialdata_location", "8");
-        motorStatus.put("serialdata_value", String.valueOf(motorEvent.getMotorStatus()));
-
-        motorStatusArray.add(motorStatus);
+//        JSONObject motorStatus = new JSONObject();
+//        motorStatus.put("serialdata_location", "8");
+//        motorStatus.put("serialdata_value", String.valueOf(motorEvent.getMotorStatus()));
+//
+//        motorStatusArray.add(motorStatus);
 
         payload.put("device_action_serial_data", motorStatusArray);
         return payload.toJSONString();
