@@ -49,7 +49,7 @@ public class WaterLevelProcessor implements Processor {
         String rfIdAndDeviceId = String.valueOf(waterLevelEvent.getSystemIdAsInt()).concat("-")
                 .concat(String.valueOf(waterLevelEvent.getDeviceIdAsInt()));
         if (waterMapper.containsKey(rfIdAndDeviceId)) {
-            LOGGER.debug("Device already exists, Hence Appending to it");
+            LOGGER.debug(rfIdAndDeviceId.concat(" Device already exists, Hence Appending to it"));
             wls = waterMapper.get(rfIdAndDeviceId);
             wls.add(waterLevelEvent);
         } else {

@@ -18,6 +18,7 @@ public abstract class GDSBase {
     protected String dateTime;
     protected long ts;
     protected int eventId;
+    protected byte []data;
 
     public int getEventId() {
         return eventId;
@@ -145,5 +146,13 @@ public abstract class GDSBase {
 
     public void setTs(long ts) {
         this.ts = ts;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }
