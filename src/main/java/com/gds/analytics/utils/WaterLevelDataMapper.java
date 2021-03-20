@@ -12,9 +12,9 @@ import java.util.Map;
 @Service
 public class WaterLevelDataMapper {
 
-    private Map<Integer, WaterLevelSeries> map = new HashMap<Integer, WaterLevelSeries>();
+    private Map<String, WaterLevelSeries> map = new HashMap<String, WaterLevelSeries>();
 
-    public Map<Integer, WaterLevelSeries> getWaterLevelMapper() {
+    public Map<String, WaterLevelSeries> getWaterLevelMapper() {
         return map;
     }
 }

@@ -43,17 +43,20 @@ public class WaterLevelProcessor implements Processor {
     }
 
     private void analyzeWaterLevelData(WaterLevelEvent waterLevelEvent, long ts) {
-        Map<Integer, WaterLevelSeries> waterMapper = waterLevelDataMapper.getWaterLevelMapper();
+        Map<String, WaterLevelSeries> waterMapper = waterLevelDataMapper.getWaterLevelMapper();
         WaterLevelSeries wls = null;
-        if (waterMapper.containsKey(waterLevelEvent.getSystemIdAsInt())) {
+
+        String rfIdAndDeviceId = String.valueOf(waterLevelEvent.getSystemIdAsInt()).concat("-")
+                .concat(String.valueOf(waterLevelEvent.getDeviceIdAsInt()));
+        if (waterMapper.containsKey(rfIdAndDeviceId)) {
             LOGGER.debug("Device already exists, Hence Appending to it");
-            wls = waterMapper.get(waterLevelEvent.getSystemIdAsInt());
+            wls = waterMapper.get(rfIdAndDeviceId);
             wls.add(waterLevelEvent);
         } else {
             wls = new WaterLevelSeries();
             wls.add(waterLevelEvent);
         }
-        waterMapper.put(waterLevelEvent.getSystemIdAsInt(), wls);
+        waterMapper.put(rfIdAndDeviceId, wls);
         waterLevelEngine.runBackground(wls, ts);
     }
 }
