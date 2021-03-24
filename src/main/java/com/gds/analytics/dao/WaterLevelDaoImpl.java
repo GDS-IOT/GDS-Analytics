@@ -49,14 +49,15 @@ public class WaterLevelDaoImpl implements WaterLevelDao {
             LOGGER.debug("waterLevelEventData.toString() ".concat(waterLevelEventData.toString()));
             // Insert into EventTxnMeta
             EventTransactionMeta eventMeta = getEventTxnMeta(waterLevelEventData);
-            String insertEventMeta = "insert into smt.sow_event_transaction_meta (idsow_evt_transaction, meta1, meta2, meta3, meta4) " +
-                    "values(?, ?, ?, ?, ?)";
+            String insertEventMeta = "insert into smt.sow_event_transaction_meta (idsow_evt_transaction, meta1, meta2, meta3, meta4, meta5) " +
+                    "values(?, ?, ?, ?, ?, ?)";
             pst = con.prepareStatement(insertEventMeta);
             pst.setLong(1, eventMeta.getIdSowEvtTxn());
             pst.setString(2, eventMeta.getMeta1());
             pst.setString(3, eventMeta.getMeta2());
             pst.setString(4, eventMeta.getMeta3());
             pst.setString(5, eventMeta.getMeta4());
+            pst.setString(6, eventMeta.getMeta5());
             LOGGER.debug("insertEventMeta :: ".concat(pst.toString()));
             insertedRows = pst.executeUpdate();
             if (0 == insertedRows) {
@@ -121,6 +122,7 @@ public class WaterLevelDaoImpl implements WaterLevelDao {
         eventMeta.setMeta2(GDSEnum.WATER_LEVEL_STATUS.getValue());
         eventMeta.setMeta3(waterLevelEvent.getDateTime());
         eventMeta.setMeta4(String.valueOf(waterLevelEvent.getWaterLevelCm()));
+        eventMeta.setMeta5(String.valueOf(waterLevelEvent.getDeviceIdAsInt()));
         return eventMeta;
     }
 }
