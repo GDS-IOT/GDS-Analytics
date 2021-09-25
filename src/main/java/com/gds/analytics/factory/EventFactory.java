@@ -52,6 +52,7 @@ public class EventFactory {
                 event = GDSEnum.DEFAULT;
             }
             switch (event) {
+                case WATER_LEVEL_STATUS_RECONCILATION:
                 case WATER_LEVEL_STATUS:
                     waterLevelProcessor.processData(data);
                     break;
