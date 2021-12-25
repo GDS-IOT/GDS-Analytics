@@ -9,11 +9,12 @@ import java.util.Map;
 public enum GDSEnum {
 
     WATER_LEVEL_STATUS(69, "SMAT_FETCH_WTRLVL_01", "Water_Level_Status"),
-    WATER_LEVEL_STATUS_RECONCILATION(113, "SMAT_FETCH_WTRLVL_113", "Water_Lvl_Reconcilation"),
+    WATER_LEVEL_STATUS_RECONCILATION(113, "SMAT_FETCH_WTRLVL_01", "Water_Level_Status"),
     MOTOR_STATUS_HB_EVENT(74, "MOTOR_STATUS_HB", "MOTOR_STATUS_HB"),
     MOTOR_STATUS_ON_OFF(75, "MOTOR_STATUS_ON_OFF", "MOTOR_STATUS_ON_OFF"),
     MOTOR_STATUS_MANUAL_MODE(83, "MOTOR_STATUS_MANUAL_MODE", "MOTOR_STATUS_MANUAL_MODE"),
-    DEFAULT(0, "No_Event", "No_Action_Or_Not_a_valid_event");
+    FLOW_METER_EVENT(114, "SMAT_FETCH_WTRLVL_01","FLOW_METER_EVENT"),
+    DEFAULT(0, "No_Event", "No_Action_Required");
 
     private int eventId;
     private String value;
