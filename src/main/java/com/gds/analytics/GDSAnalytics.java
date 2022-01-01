@@ -43,9 +43,9 @@ public class GDSAnalytics {
 
     }
 
-    public void test(){
+    public void test() {
         System.out.println("Coming here");
-        byte []data = new byte[22];
+        byte[] data = new byte[22];
         data[0] = 18;
         data[1] = 1;
         data[2] = 13;
@@ -104,7 +104,7 @@ public class GDSAnalytics {
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder){
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.setConnectTimeout(Duration.ofSeconds(10))
                 .setReadTimeout(Duration.ofSeconds(10))
                 .build();

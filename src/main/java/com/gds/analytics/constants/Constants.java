@@ -75,6 +75,13 @@ public class Constants {
 
     public static final String WATER_LEVEL_EVENT_ID = "water.level.event.id";
 
+    // Flow meter event
+    public static final String FLOW_EVENT_EVENT = "flow.meter.event";
+    public static final String FLOW_METER_META1_START_IDX = "flow.meter.meta1.start";
+    public static final String FLOW_METER_META1_END_IDX = "flow.meter.meta1.end";
+    public static final String FLOW_METER_META2_START_IDX = "flow.meter.meta2.start";
+    public static final String FLOW_METER_META2_END_IDX = "flow.meter.meta2.end";
+
 
     // API Events
     public static final String API_WATER_LEVEL_EVENT = "event.api.water.level.id";
