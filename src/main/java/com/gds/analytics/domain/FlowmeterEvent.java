@@ -1,5 +1,7 @@
 package com.gds.analytics.domain;
 
+import com.gds.domain.GDSData;
+
 /**
  * @author Sujith Ramanathan
  */
