@@ -39,6 +39,10 @@ public class EventFactory {
     @Qualifier("MotorStatusProcessor")
     private Processor motorStatusProcessor;
 
+    @Autowired
+    @Qualifier("FlowMeterProcessor")
+    private Processor flowMeterProcessor;
+
     public void processEvent(String key, GDSData data) {
         if (heartBeatEvent == data.getGdsData()[pacTypeIdx]) {
             LOGGER.debug("HeartBeat Event Initiated.");
@@ -52,6 +56,7 @@ public class EventFactory {
                 event = GDSEnum.DEFAULT;
             }
             switch (event) {
+                case WATER_LEVEL_STATUS_RECONCILATION:
                 case WATER_LEVEL_STATUS:
                     waterLevelProcessor.processData(data);
                     break;
@@ -59,6 +64,9 @@ public class EventFactory {
                 case MOTOR_STATUS_ON_OFF:
                 case MOTOR_STATUS_MANUAL_MODE:
                     motorStatusProcessor.processData(data);
+                    break;
+                case FLOW_METER_EVENT:
+                    flowMeterProcessor.processData(data);
                     break;
                 case DEFAULT:
                     LOGGER.error("Not a valid event");

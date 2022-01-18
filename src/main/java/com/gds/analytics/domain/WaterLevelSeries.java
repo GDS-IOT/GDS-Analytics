@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class WaterLevelSeries {
 
-
     private List<WaterLevelEvent> waterLevelSeries;
     private boolean stableToIncrease;
     private boolean increaseToStableTriggered;

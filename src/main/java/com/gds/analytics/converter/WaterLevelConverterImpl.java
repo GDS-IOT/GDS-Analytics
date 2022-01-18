@@ -12,29 +12,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class WaterLevelConverterImpl extends Converter<WaterLevelEvent> {
 
-    @Value("${"+ Constants.WATER_LEVEL_EVENT_ID +"}")
+    @Value("${" + Constants.WATER_LEVEL_EVENT_ID + "}")
     private int eventId;
 
     @Value("${" + Constants.EVENT_ID_IDX + "}")
     private int eventIdIdx;
 
-    @Value("${"+Constants.WATER_LVL_CM_IDX+"}")
+    @Value("${" + Constants.WATER_LVL_CM_IDX + "}")
     private int waterLvlCmIdx;
 
-    @Value("${"+Constants.WATER_LVL_PERCENTAGE_IDX+"}")
+    @Value("${" + Constants.WATER_LVL_PERCENTAGE_IDX + "}")
     private int waterLvlPercentageIdx;
 
     @Override
     public WaterLevelEvent convert(GDSData gdsData) {
         WaterLevelEvent wl = new WaterLevelEvent();
         super.setBaseData(wl, gdsData);
-        byte []data = gdsData.getGdsData();
-        wl.setEventId((int)data[eventIdIdx]);
-        int waterLevelCm = ((int)data[waterLvlCmIdx] * 100) + (int)data[waterLvlCmIdx+1];
+        byte[] data = gdsData.getGdsData();
+        wl.setEventId((int) data[eventIdIdx]);
+        int waterLevelCm = ((int) data[waterLvlCmIdx] * 100) + (int) data[waterLvlCmIdx + 1];
 //        wl.setWaterLevelPercentage((int)data[waterLvlPercentageIdx]);
         wl.setWaterLevelPercentage(data[waterLvlPercentageIdx]);
         wl.setWaterLevelCm(waterLevelCm);
         return wl;
-
     }
 }

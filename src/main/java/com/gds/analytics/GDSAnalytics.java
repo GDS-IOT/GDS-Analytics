@@ -6,6 +6,7 @@ import com.gds.domain.GDSData;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +24,10 @@ public class GDSAnalytics {
 
     @Autowired
     private GDSAnalyticsProcessor gdsAnalyticsProcessor;
+
+//    @Autowired
+//    @Qualifier("FlowMeterProcessor")
+//    private Processor flowmeterProcessor;
 
     @PostConstruct
     public void initProperties() {
@@ -43,10 +48,9 @@ public class GDSAnalytics {
 
     }
 
-    public void test(){
-        System.out.println("Coming here");
-        byte []data = new byte[22];
-        data[0] = 18;
+    public void test() {
+        byte[] data = new byte[70];
+        data[0] = 35;
         data[1] = 1;
         data[2] = 13;
         data[3] = 75;
@@ -75,7 +79,7 @@ public class GDSAnalytics {
         data[17] = 0;
 
         // Event Id
-        data[18] = 74;
+        data[18] = 114;
 
         data[19] = 0;
 
@@ -84,14 +88,27 @@ public class GDSAnalytics {
         // Water Level Data
         data[21] = 80;
 
+        data[22] = 00;
+        data[23] = 00;
+        data[24] = 00;
+        data[25] = 50;
+
+        data[26] = 00;
+        data[27] = 00;
+        data[28] = 00;
+        data[29] = 00;
+        data[30] = 00;
+        data[31] = 0x08;
+
         GDSData gdsData = new GDSData();
 //        yyyy-MM-dd HH:mm:ss
         gdsData.setTs("2021-03-14 22:30:54");
         gdsData.setGdsData(data);
 
-
 //        process.processData(gdsData);
 //        motorStatusProcessor.processData(gdsData);
+//        flowmeterProcessor.processData(gdsData);
+
     }
 
     public static void main(String[] args) {
@@ -100,11 +117,12 @@ public class GDSAnalytics {
             SpringApplication.run(GDSAnalytics.class, args);
         } catch (Exception e) {
             LOGGER.error("Error while starting up the application ", e);
+            e.printStackTrace();
         }
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder){
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.setConnectTimeout(Duration.ofSeconds(10))
                 .setReadTimeout(Duration.ofSeconds(10))
                 .build();

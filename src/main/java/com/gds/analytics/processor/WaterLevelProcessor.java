@@ -1,5 +1,6 @@
 package com.gds.analytics.processor;
 
+import com.gds.analytics.constants.GDSEnum;
 import com.gds.analytics.converter.Converter;
 import com.gds.analytics.dao.WaterLevelDao;
 import com.gds.analytics.domain.WaterLevelEvent;
@@ -39,7 +40,11 @@ public class WaterLevelProcessor implements Processor {
     public void processData(GDSData gdsData) {
         WaterLevelEvent waterLevelEvent = waterLevelConverter.convert(gdsData);
         waterLevelDao.insertWaterLvlData(waterLevelEvent);
-        analyzeWaterLevelData(waterLevelEvent, waterLevelEvent.getTs());
+
+        if(GDSEnum.WATER_LEVEL_STATUS_RECONCILATION.getEventId() != waterLevelEvent.getEventId())
+            analyzeWaterLevelData(waterLevelEvent, waterLevelEvent.getTs());
+        else
+            LOGGER.debug("Water Level Status Reconcilation 113, Hence not triggering analytics");
     }
 
     private void analyzeWaterLevelData(WaterLevelEvent waterLevelEvent, long ts) {

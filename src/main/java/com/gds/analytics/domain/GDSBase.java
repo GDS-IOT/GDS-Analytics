@@ -1,5 +1,7 @@
 package com.gds.analytics.domain;
 
+import java.util.Arrays;
+
 public abstract class GDSBase {
 
     protected int startByte;
@@ -154,5 +156,29 @@ public abstract class GDSBase {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GDSBase{");
+        sb.append("startByte=").append(startByte);
+        sb.append(", systemId='").append(systemId).append('\'');
+        sb.append(", systemIdAsInt=").append(systemIdAsInt);
+        sb.append(", deviceId='").append(deviceId).append('\'');
+        sb.append(", deviceIdAsInt=").append(deviceIdAsInt);
+        sb.append(", deviceType=").append(deviceType);
+        sb.append(", originRSSI=").append(originRSSI);
+        sb.append(", originNetworkLevel=").append(originNetworkLevel);
+        sb.append(", hopCounter=").append(hopCounter);
+        sb.append(", messageCounter='").append(messageCounter).append('\'');
+        sb.append(", latencyCounter='").append(latencyCounter).append('\'');
+        sb.append(", packetType=").append(packetType);
+        sb.append(", messageType=").append(messageType);
+        sb.append(", dateTime='").append(dateTime).append('\'');
+        sb.append(", ts=").append(ts);
+        sb.append(", eventId=").append(eventId);
+        sb.append(", data=").append(Arrays.toString(data));
+        sb.append(", ");
+        return sb.toString();
     }
 }
