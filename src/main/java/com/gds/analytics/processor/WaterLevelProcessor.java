@@ -17,6 +17,11 @@ import java.util.Map;
 
 /**
  * @author Sujith Ramanathan
+ *
+ * event code 2 digit to be provided by saran to sujith
+ * Event trigger config to be done for flow meter based on the event code
+ * Prod host point for Analytic to API
+ *
  */
 @Service
 @Qualifier("waterLevelProcessor")
@@ -49,7 +54,7 @@ public class WaterLevelProcessor implements Processor {
 
     private void analyzeWaterLevelData(WaterLevelEvent waterLevelEvent, long ts) {
         Map<String, WaterLevelSeries> waterMapper = waterLevelDataMapper.getWaterLevelMapper();
-        WaterLevelSeries wls = null;
+        WaterLevelSeries wls;
 
         String rfIdAndDeviceId = String.valueOf(waterLevelEvent.getSystemIdAsInt()).concat("-")
                 .concat(String.valueOf(waterLevelEvent.getDeviceIdAsInt()));
