@@ -17,11 +17,6 @@ import java.util.Map;
 
 /**
  * @author Sujith Ramanathan
- *
- * event code 2 digit to be provided by saran to sujith
- * Event trigger config to be done for flow meter based on the event code
- * Prod host point for Analytic to API
- *
  */
 @Service
 @Qualifier("waterLevelProcessor")
