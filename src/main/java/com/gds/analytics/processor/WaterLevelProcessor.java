@@ -49,7 +49,7 @@ public class WaterLevelProcessor implements Processor {
 
     private void analyzeWaterLevelData(WaterLevelEvent waterLevelEvent, long ts) {
         Map<String, WaterLevelSeries> waterMapper = waterLevelDataMapper.getWaterLevelMapper();
-        WaterLevelSeries wls = null;
+        WaterLevelSeries wls;
 
         String rfIdAndDeviceId = String.valueOf(waterLevelEvent.getSystemIdAsInt()).concat("-")
                 .concat(String.valueOf(waterLevelEvent.getDeviceIdAsInt()));
