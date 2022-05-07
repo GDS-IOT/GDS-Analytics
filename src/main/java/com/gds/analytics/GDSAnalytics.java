@@ -25,14 +25,14 @@ public class GDSAnalytics {
     @Autowired
     private GDSAnalyticsProcessor gdsAnalyticsProcessor;
 
-//    @Autowired
-//    @Qualifier("FlowMeterProcessor")
-//    private Processor flowmeterProcessor;
+    @Autowired
+    @Qualifier("FlowMeterProcessor")
+    private Processor flowmeterProcessor;
 
     @PostConstruct
     public void initProperties() {
         PropertyConfigurator.configure(this.getClass().getClassLoader().getResourceAsStream("log4j.properties"));
-        LOGGER.debug("GDS-Analytics Init Properties - Success ");
+        LOGGER.debug("GDS-Analytics Init Properties - Success - 1.0 ");
         gdsAnalyticsProcessor.processMessage();
 
 
@@ -45,10 +45,10 @@ public class GDSAnalytics {
 //        waterLevelDao.insertWaterLvlData(waterLevelEvent);
 
 //        test();
-
     }
 
     public void test() {
+        System.out.println("Coming into test");
         byte[] data = new byte[70];
         data[0] = 35;
         data[1] = 1;
@@ -79,7 +79,7 @@ public class GDSAnalytics {
         data[17] = 0;
 
         // Event Id
-        data[18] = 114;
+        data[18] = 48;
 
         data[19] = 0;
 
@@ -105,9 +105,7 @@ public class GDSAnalytics {
         gdsData.setTs("2021-03-14 22:30:54");
         gdsData.setGdsData(data);
 
-//        process.processData(gdsData);
-//        motorStatusProcessor.processData(gdsData);
-//        flowmeterProcessor.processData(gdsData);
+        flowmeterProcessor.processData(gdsData);
 
     }
 
