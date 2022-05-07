@@ -14,9 +14,7 @@ public class GDSDeserializer<T> implements Deserializer<T> {
     private static final Logger LOGGER = Logger.getLogger(GDSDeserializer.class.getName());
 
     @Override
-    public void configure(Map<String, ?> map, boolean b) {
-
-    }
+    public void configure(Map<String, ?> map, boolean b) {}
 
     @Override
     public T deserialize(String s, byte[] data) {
