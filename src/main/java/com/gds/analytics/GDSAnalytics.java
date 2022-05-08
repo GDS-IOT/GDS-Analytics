@@ -1,5 +1,6 @@
 package com.gds.analytics;
 
+import com.gds.analytics.http.WaterLevelApi;
 import com.gds.analytics.processor.GDSAnalyticsProcessor;
 import com.gds.analytics.processor.Processor;
 import com.gds.domain.GDSData;
@@ -115,7 +116,6 @@ public class GDSAnalytics {
             SpringApplication.run(GDSAnalytics.class, args);
         } catch (Exception e) {
             LOGGER.error("Error while starting up the application ", e);
-            e.printStackTrace();
         }
     }
 
