@@ -33,7 +33,7 @@ public class GDSAnalytics {
     @PostConstruct
     public void initProperties() {
         PropertyConfigurator.configure(this.getClass().getClassLoader().getResourceAsStream("log4j.properties"));
-        LOGGER.debug("GDS-Analytics Init Properties - Success - 1.1 ");
+        LOGGER.debug("GDS-Analytics Init Properties - Success - 1.2 ");
         gdsAnalyticsProcessor.processMessage();
 
 
