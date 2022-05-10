@@ -85,6 +85,7 @@ public class Constants {
 
     // API Events
     public static final String API_WATER_LEVEL_EVENT = "event.api.water.level.id";
+    public static final String FLOW_METER_LEVEL_EVENT = "event.api.flow.meter.id";
 
 
     // HTTP URL

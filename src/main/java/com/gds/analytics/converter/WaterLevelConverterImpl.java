@@ -24,6 +24,9 @@ public class WaterLevelConverterImpl extends Converter<WaterLevelEvent> {
     @Value("${" + Constants.WATER_LVL_PERCENTAGE_IDX + "}")
     private int waterLvlPercentageIdx;
 
+    @Value("${" + Constants.API_WATER_LEVEL_EVENT + "}")
+    private String waterLevelApiTriggerEventId;
+
     @Override
     public WaterLevelEvent convert(GDSData gdsData) {
         WaterLevelEvent wl = new WaterLevelEvent();
@@ -34,6 +37,7 @@ public class WaterLevelConverterImpl extends Converter<WaterLevelEvent> {
 //        wl.setWaterLevelPercentage((int)data[waterLvlPercentageIdx]);
         wl.setWaterLevelPercentage(data[waterLvlPercentageIdx]);
         wl.setWaterLevelCm(waterLevelCm);
+        wl.setWaterLevelTriggerId(waterLevelApiTriggerEventId);
         return wl;
     }
 }

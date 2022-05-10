@@ -27,6 +27,7 @@ public class FlowmeterToWaterLvlAdapter {
         WaterLevelEvent waterLevelEvent = waterLevelEventConverter.convert(gdsData);
         waterLevelEvent.setWaterLevelPercentage(flowmeterEvent.getMeta1());
         waterLevelEvent.setWaterLevelCm(flowmeterEvent.getMeta2());
+        waterLevelEvent.setWaterLevelTriggerId(flowmeterEvent.getFlowMeterApiTriggerEventId());
         return waterLevelEvent;
     }
 
