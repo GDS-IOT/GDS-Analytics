@@ -44,9 +44,6 @@ public class WaterLevelApi extends ApiSpec{
     @Value("${" + Constants.GDS_WATER_LEVEL_TRIGGER_URL + "}")
     private String waterLevelTriggerUrl;
 
-    @Value("${" + Constants.API_WATER_LEVEL_EVENT + "}")
-    private String waterLevelApiEventId;
-
     public String isValidAction(String action) {
         String payload = createRuleBody(action);
         HttpHeaders headers = getHeaders();
@@ -84,7 +81,7 @@ public class WaterLevelApi extends ApiSpec{
     }
 
     public boolean isTriggered(WaterLevelSeries waterLevelSeries, String waterlevelPattern) {
-        String payload = createWaterLevelBody(waterLevelSeries, waterlevelPattern, waterLevelApiEventId);
+        String payload = createWaterLevelBody(waterLevelSeries, waterlevelPattern);
         HttpHeaders headers = getHeaders();
         HttpEntity<String> request = new HttpEntity<String>(payload, headers);
         LOGGER.debug("WaterLevelPayload ".concat(payload));
@@ -118,14 +115,14 @@ public class WaterLevelApi extends ApiSpec{
         return json.toJSONString();
     }
 
-    private String createWaterLevelBody(WaterLevelSeries waterLevelSeries, String waterLevelPattern, String eventId) {
+    private String createWaterLevelBody(WaterLevelSeries waterLevelSeries, String waterLevelPattern) {
         JSONObject payload = new JSONObject();
         JSONArray waterLevels = new JSONArray();
         JSONObject waterLevel = null;
         WaterLevelEvent waterLevelEvent = waterLevelSeries.getWaterLevelSeries().get(0);
         payload.put("RFDeviceId", waterLevelEvent.getSystemIdAsInt());
         payload.put("MCUDeviceId", waterLevelEvent.getDeviceIdAsInt());
-        payload.put("eventId", eventId);
+        payload.put("eventId", waterLevelEvent.getWaterwaterLevelTriggerId());
         payload.put("waterLevelPattern", waterLevelPattern);
         List<WaterLevelEvent> dataList = waterLevelSeries.getWaterLevelSeries();
         int dataListSize = dataList.size();

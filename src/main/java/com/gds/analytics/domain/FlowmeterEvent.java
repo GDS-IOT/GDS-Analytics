@@ -11,6 +11,8 @@ public class FlowmeterEvent extends GDSBase {
 
     private int meta2;
 
+    private String flowMeterApiTriggerEventId;
+
     public int getMeta1() {
         return meta1;
     }
@@ -25,6 +27,14 @@ public class FlowmeterEvent extends GDSBase {
 
     public void setMeta2(int meta2) {
         this.meta2 = meta2;
+    }
+
+    public String getFlowMeterApiTriggerEventId() {
+        return flowMeterApiTriggerEventId;
+    }
+
+    public void setFlowMeterApiTriggerEventId(String flowMeterApiTriggerEventId) {
+        this.flowMeterApiTriggerEventId = flowMeterApiTriggerEventId;
     }
 
     @Override

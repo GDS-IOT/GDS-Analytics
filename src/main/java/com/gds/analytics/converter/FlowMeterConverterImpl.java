@@ -30,6 +30,9 @@ public class FlowMeterConverterImpl extends Converter<FlowmeterEvent> {
     @Value("${" + Constants.FLOW_METER_META2_END_IDX + "}")
     private int meta2EndIdx;
 
+    @Value("${" + Constants.FLOW_METER_LEVEL_EVENT + "}")
+    private String flowMeterApiTriggerEventId;
+
     @Override
     public FlowmeterEvent convert(GDSData gdsData) {
         FlowmeterEvent fe = new FlowmeterEvent();
@@ -44,5 +47,6 @@ public class FlowMeterConverterImpl extends Converter<FlowmeterEvent> {
         int meta2 = Integer.parseInt(super.getString(data, meta2StartIdx, meta2EndIdx, ""));
         flowmeterEvent.setMeta1(meta1);
         flowmeterEvent.setMeta2(meta2);
+        flowmeterEvent.setFlowMeterApiTriggerEventId(flowMeterApiTriggerEventId);
     }
 }
